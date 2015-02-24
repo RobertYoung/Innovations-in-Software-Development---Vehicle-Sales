@@ -43,7 +43,7 @@ public class VehiclesFXML extends Application {
     public void start(Stage stage) throws Exception {
         
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLDocument.fxml")); //FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLDocument.fxml"));
             Parent root = fxmlLoader.load();            
             Scene scene = new Scene(root, 1024, 768);
 
@@ -57,7 +57,8 @@ public class VehiclesFXML extends Application {
         }
         
         this.getSalesData();
-        this.setupUserInterface();
+        this.fxml.setSalesData(sales);
+        this.fxml.setupUserInterface();
     }
     
     //**********************//
@@ -73,20 +74,5 @@ public class VehiclesFXML extends Application {
         {
             System.out.println(sale.toString());
         }
-    }
-    
-    //*****************//
-    // SETUP FUNCTIONS //
-    //*****************//
-    private void setupUserInterface()
-    {
-        this.setupYearCheckBoxes();
-    }
-    
-    private void setupYearCheckBoxes()
-    {
-        List<Integer> years = this.sales.stream().map(x -> x.getYear()).distinct().collect(Collectors.toList());
-        
-        this.fxml.setupYearCheckboxes(years);
     }
 }
