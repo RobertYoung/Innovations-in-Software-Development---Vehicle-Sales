@@ -9,7 +9,7 @@
 <AnchorPane id="AnchorPane" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vehiclesfxml.FXMLDocumentController">
     <children>
       <HBox fx:id="topHBox" layoutX="14.0" layoutY="37.0" prefHeight="129.0" prefWidth="986.0" style="-fx-border-color: #000;" />
-      <MenuBar layoutY="2.0">
+      <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="1024.0">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
@@ -28,12 +28,7 @@
           </Menu>
         </menus>
       </MenuBar>
-      <VBox fx:id="leftVBox" layoutX="14.0" layoutY="174.0" prefHeight="474.0" prefWidth="461.0" style="-fx-border-color: #000;">
-         <children>
-              <Button fx:id="button" onAction="#handleButtonAction" text="Click Me!" />
-              <Label fx:id="label" minHeight="16" minWidth="69" />
-         </children>
-      </VBox>
+      <VBox id="leftVBox" fx:id="leftVBox" layoutX="14.0" layoutY="174.0" prefHeight="474.0" prefWidth="461.0" style="-fx-border-color: #000;" />
       <Pane layoutX="37.0" layoutY="520.0" prefHeight="200.0" prefWidth="200.0">
          <children>
             <Pane layoutX="-21.0" layoutY="140.0" prefHeight="61.0" prefWidth="986.0" style="-fx-border-color: #000;" />

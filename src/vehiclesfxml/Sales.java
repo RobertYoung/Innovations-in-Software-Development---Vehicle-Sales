@@ -15,16 +15,19 @@ import javafx.beans.property.StringProperty;
  * @author cmpryoun
  */
 public class Sales {
-    private IntegerProperty QTR = new SimpleIntegerProperty();
-    private IntegerProperty Quantity = new SimpleIntegerProperty();;
-    private StringProperty Region = new SimpleStringProperty();
-    private StringProperty Vehicle = new SimpleStringProperty();;
-    private IntegerProperty Year =  new SimpleIntegerProperty();;
+    private int QTR;
+    private int Quantity;
+    private String Region;
+    private String Vehicle;
+    private int Year;
     
     public Sales(int qtr, int quantity, String region, String vehicle, int year)
     {
         this.setQTR(qtr);
-        
+        this.setQuantity(quantity);
+        this.setRegion(region);
+        this.setVehicle(vehicle);
+        this.setYear(year);
     }
     
     //***************//
@@ -32,88 +35,106 @@ public class Sales {
     //***************//
     public void setQTR(int qtr)
     {
-        this.QTR.setValue(qtr);
+        this.QTR = qtr;
     }
     
     public int getQTR()
     {
-        return this.QTR.getValue();
+        return this.QTR;
     }
     
+    /*
     public IntegerProperty qtrProperty()
     {
         return this.QTR;
-    }
+    }*/
     
     //********************//
     // QUANTITY FUNCTIONS //
     //********************//
     public void setQuantity(int quantity)
     {
-        this.Quantity.setValue(quantity);
+        this.Quantity = quantity;
     }
     
     public int getQuantity()
     {
-        return this.Quantity.getValue();
+        return this.Quantity;
     }
     
+    /*
     public IntegerProperty quantityProperty()
     {
         return this.Quantity;
-    }
+    }*/
     
     //******************//
     // REGION FUNCTIONS //
     //******************//
     public void setRegion(String region)
     {
-        this.Region.setValue(region);
+        this.Region = region;
     }
     
     public String getRegion()
     {
-        return this.Region.getValue();
+        return this.Region;
     }
     
+    /*
     public StringProperty regionProperty()
     {
         return this.Region;
-    }
+    }*/
     
     //*******************//
     // VEHICLE FUNCTIONS //
     //*******************//
     public void setVehicle(String vehicle)
     {
-        this.Vehicle.setValue(vehicle);
+        this.Vehicle = vehicle;
     }
     
     public String getVehicle()
     {
-        return this.Vehicle.getValue();
+        return this.Vehicle;
     }
     
+    /*
     public StringProperty vehicleProperty()
     {
         return this.Vehicle;
-    }
+    }*/
     
     //****************//
     // YEAR FUNCTIONS //
     //****************//
     public void setYear(int year)
     {
-        this.Year.setValue(year);
+        this.Year = year;
     }
     
     public int getYear()
     {
-        return this.Year.getValue();
+        return this.Year;
     }
     
+    /*
     public IntegerProperty yearProperty()
     {
         return this.Year;
+    }*/
+    
+    //******************//
+    // HELPER FUNCTIONS //
+    //******************//
+    public String toString()
+    {
+        return String.format("Sales: %s %s %s %s %s", 
+                ("QTR: "+ this.getQTR()),
+                ("Quantity: " + this.getQuantity()),
+                ("Region: " + this.getRegion()),
+                ("Vehicle: " + this.getVehicle()),
+                ("Year: " + this.getYear()));
     }
 }

@@ -7,10 +7,10 @@ package vehiclesfxml;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
+import javafx.scene.control.CheckBox;
+import javafx.scene.layout.VBox;
 
 /**
  *
@@ -19,17 +19,32 @@ import javafx.scene.control.Label;
 public class FXMLDocumentController implements Initializable {
     
     @FXML
-    private Label label;
+    private VBox leftVBox;
     
-    @FXML
-    private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
-        label.setText("Hello World!");
-    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        
     }    
     
+    public void setupYearCheckboxes()
+    {
+        CheckBox[] checkBoxes = new CheckBox[2];
+
+        CheckBox checkBox = new CheckBox();
+        
+        this.leftVBox.getChildren().add(checkBox);
+        
+        /*
+        for (byte index = 0; index < strings.size(); index++) {
+            checkBoxes[index] = new CheckBox(strings.get(index));
+            checkBoxes[index].setSelected(true);
+            checkBoxes[index].addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    System.out.println("Firstly, Event Filters !");
+                }
+            });
+*/
+    }
 }
