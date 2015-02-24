@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -79,11 +80,13 @@ public class VehiclesFXML extends Application {
     //*****************//
     private void setupUserInterface()
     {
-        this.setupCheckBoxes();
+        this.setupYearCheckBoxes();
     }
     
-    private void setupCheckBoxes()
+    private void setupYearCheckBoxes()
     {
+        List<Integer> years = this.sales.stream().map(x -> x.getYear()).distinct().collect(Collectors.toList());
         
+        this.fxml.setupYearCheckboxes(years);
     }
 }
