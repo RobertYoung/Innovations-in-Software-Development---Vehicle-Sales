@@ -9,21 +9,29 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 /**
@@ -33,10 +41,32 @@ import javafx.scene.layout.VBox;
 public class FXMLDocumentController implements Initializable {
     
     @FXML
+    // Anchor
+    private AnchorPane anchorPane;
+    
+    // Layouts
     private VBox vBoxLeft;
     private HBox hBoxYearCheckboxes;
-    private PieChart pieChart;
+    private HBox hBoxChartSelection;
+    private Pane paneCharts;
+    
+    // Combo boxes
     private ComboBox comboBoxYears;
+    
+    // Chart rabio buttons
+    private RadioButton rbPieChart;
+    private RadioButton rbLineChart;
+    private RadioButton rbBarChart;
+    
+    // Pane charts
+    private Pane panePieChart;
+    private Pane paneBarChart;
+    private Pane paneLineChart;
+    
+    // Charts
+    private PieChart pieChart;
+    private BarChart barChart;
+    private LineChart lineChart;
     
     // Sales variables
     private List<Sales> sales;
@@ -45,11 +75,34 @@ public class FXMLDocumentController implements Initializable {
     // Scene variables
     private Scene scene;
     
+    // Checkboxes
+    CheckBox[] yearCheckBoxes;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        // Layout
+        this.paneCharts = (Pane)this.anchorPane.lookup("#paneCharts");
+        this.vBoxLeft = (VBox)this.paneCharts.lookup("#vBoxLeft");
         this.hBoxYearCheckboxes = (HBox)this.vBoxLeft.lookup("#hBoxYearCheckboxes");
-        this.pieChart = (PieChart)this.vBoxLeft.lookup("#pieChart");
+        this.hBoxChartSelection = (HBox)this.vBoxLeft.lookup("#hBoxChartSelection");
+        
+        // Checkboxes
         this.comboBoxYears = (ComboBox)this.vBoxLeft.lookup("#comboBoxYears");
+        
+        // Radio buttons
+        this.rbPieChart = (RadioButton)this.hBoxChartSelection.lookup("#rbPieChart");
+        this.rbLineChart = (RadioButton)this.hBoxChartSelection.lookup("#rbLineChart");
+        this.rbBarChart = (RadioButton)this.hBoxChartSelection.lookup("#rbBarChart");
+        
+        // Chart panes
+        this.panePieChart = (Pane)this.paneCharts.lookup("#panePieChart");
+        this.paneBarChart = (Pane)this.paneCharts.lookup("#paneBarChart");
+        this.paneLineChart = (Pane)this.paneCharts.lookup("#paneLineChart");
+        
+        // Charts
+        this.pieChart = (PieChart)this.panePieChart.lookup("#pieChart");
+        this.barChart = (BarChart)this.paneBarChart.lookup("#barChart");
+        this.lineChart = (LineChart)this.paneLineChart.lookup("#lineChart");
     }    
     
     //*****************//
@@ -82,6 +135,8 @@ public class FXMLDocumentController implements Initializable {
         this.setupYearCheckboxes();
         this.setupYearComboBox();
         this.setupPieChart();
+        this.setupBarChart();
+        this.setupChartSelection();
     }
     
     //***************************//
@@ -89,15 +144,21 @@ public class FXMLDocumentController implements Initializable {
     //***************************//
     public void setupYearCheckboxes()
     {
-        CheckBox[] checkBoxes = new CheckBox[years.size()];
+        yearCheckBoxes = new CheckBox[years.size()];
         
         for (int i = 0; i < years.size(); i++)
         {
-            checkBoxes[i] = new CheckBox(years.get(i).toString());
-            checkBoxes[i].setSelected(true);
+            yearCheckBoxes[i] = new CheckBox(years.get(i).toString());
+            yearCheckBoxes[i].setSelected(true);
+            yearCheckBoxes[i].addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>()
+            {
+                @Override
+                public void handle(ActionEvent event) {
+                    constructBarChart();
+                }
+            });
         }
-
-        this.hBoxYearCheckboxes.getChildren().addAll(checkBoxes);
+        this.hBoxYearCheckboxes.getChildren().addAll(yearCheckBoxes);
     }
     
     //*************************//
@@ -197,5 +258,74 @@ public class FXMLDocumentController implements Initializable {
         
         this.pieChart.labelsVisibleProperty().set(true);
         this.pieChart.setTitle("Quarterly Sales Figues for " + year);
+    }
+    
+    //*********************//
+    // BAR CHART FUNCTIONS //
+    //*********************//
+    private void setupBarChart()
+    {
+        this.barChart.animatedProperty().set(false);
+        this.constructBarChart();
+    }
+    
+    private void constructBarChart()
+    {
+        this.barChart.getData().clear();
+        
+        for (CheckBox cb : this.yearCheckBoxes)
+        {
+            if (cb.isSelected())
+            {
+                XYChart.Series series = new XYChart.Series();
+                
+                series.setName(cb.getText());
+                
+                /*
+                for (Sales sale : this.sales)
+                {
+                    if (sale.getYear() == Integer.parseInt(cb.getText()))
+                    {
+                        series.getData().add(new XYChart.Data<>(sale.getVehicle(), sale.getQuantity()));
+                    }
+                }*/
+                
+                this.sales.stream().filter(x -> x.getYear() == Integer.parseInt(cb.getText())).forEach(x -> {
+                    series.getData().add(new XYChart.Data<>(x.getVehicle(), x.getQuantity()));
+                });
+                
+                this.barChart.getData().add(series);
+            }
+        }
+        
+        if (this.barChart.getData().size() == 0)
+        {
+            this.barChart.setTitle("Please select a year(s)");
+        }else{
+            this.barChart.setTitle("Vehicle Sales");
+        }
+    }
+    
+    //***************************//
+    // CHART SELECTION FUNCTIONS //
+    //***************************//
+    private void setupChartSelection()
+    {
+        this.pieChart.visibleProperty().bind(this.rbPieChart.selectedProperty());
+        this.barChart.visibleProperty().bind(this.rbBarChart.selectedProperty());
+        this.lineChart.visibleProperty().bind(this.rbLineChart.selectedProperty());
+        
+        this.pieChart.visibleProperty().addListener(new ChangeListener<Boolean>()
+        {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                for (CheckBox cb : yearCheckBoxes)
+                {
+                    cb.disableProperty().set(newValue);
+                }
+                
+                comboBoxYears.disableProperty().set(!newValue);
+            }            
+        });
     }
 }

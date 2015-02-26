@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.chart.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -7,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vehiclesfxml.FXMLDocumentController">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vehiclesfxml.FXMLDocumentController">
     <children>
       <HBox fx:id="topHBox" layoutX="14.0" layoutY="37.0" prefHeight="129.0" prefWidth="986.0" style="-fx-border-color: #000;" />
       <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="1024.0">
@@ -29,14 +30,68 @@
           </Menu>
         </menus>
       </MenuBar>
-      <VBox id="vBoxLeft" fx:id="vBoxLeft" layoutX="14.0" layoutY="174.0" prefHeight="474.0" prefWidth="461.0" style="-fx-border-color: #000;">
+      <Pane fx:id="paneCharts" layoutX="14.0" layoutY="175.0" prefHeight="474.0" prefWidth="461.0" style="-fx-border-color: #000;">
          <children>
-            <HBox id="hBoxYearCheckboxes" fx:id="hBoxYearCheckboxes" prefHeight="45.0" prefWidth="459.0">
+            <VBox id="vBoxLeft" fx:id="vBoxLeft" prefHeight="76.0" prefWidth="461.0">
                <children>
-                  <ComboBox fx:id="comboBoxYears" onAction="#setupPieChart" prefWidth="150.0" />
-               </children></HBox>
-            <PieChart fx:id="pieChart" />
-         </children></VBox>
+                  <VBox alignment="TOP_CENTER" prefHeight="46.0" prefWidth="459.0">
+                     <children>
+                        <Label prefHeight="25.0" prefWidth="240.0" text="Select the type of chart to display" textAlignment="CENTER">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <HBox fx:id="hBoxChartSelection" alignment="TOP_CENTER" prefHeight="29.0" prefWidth="459.0">
+                           <children>
+                              <RadioButton fx:id="rbPieChart" mnemonicParsing="false" selected="true" text="Pie">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="toggleChart" />
+                                 </toggleGroup>
+                              </RadioButton>
+                              <RadioButton fx:id="rbBarChart" mnemonicParsing="false" text="Bar" toggleGroup="$toggleChart" />
+                              <RadioButton fx:id="rbLineChart" mnemonicParsing="false" text="Line" toggleGroup="$toggleChart" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <HBox id="hBoxYearCheckboxes" fx:id="hBoxYearCheckboxes" alignment="TOP_CENTER" prefHeight="45.0" prefWidth="459.0">
+                     <children>
+                        <ComboBox fx:id="comboBoxYears" onAction="#setupPieChart" prefWidth="150.0" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <Pane fx:id="panePieChart" layoutY="80.0" prefHeight="398.0" prefWidth="461.0">
+               <children>
+                  <PieChart fx:id="pieChart" prefHeight="383.0" prefWidth="459.0" />
+               </children>
+            </Pane>
+            <Pane fx:id="paneBarChart" layoutY="80.0" prefHeight="398.0" prefWidth="461.0">
+               <children>
+                  <BarChart fx:id="barChart" prefHeight="383.0" prefWidth="459.0" title="Bar Chart">
+                    <xAxis>
+                      <CategoryAxis side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis side="LEFT" />
+                    </yAxis>
+                  </BarChart>
+               </children>
+            </Pane>
+            <Pane fx:id="paneLineChart" layoutY="80.0" prefHeight="398.0" prefWidth="461.0">
+               <children>
+                  <LineChart fx:id="lineChart" prefHeight="383.0" prefWidth="459.0" title="Line Chart">
+                    <xAxis>
+                      <CategoryAxis side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis side="LEFT" />
+                    </yAxis>
+                  </LineChart>
+               </children>
+            </Pane>
+         </children>
+      </Pane>
       <Pane layoutX="37.0" layoutY="520.0" prefHeight="200.0" prefWidth="200.0">
          <children>
             <Pane layoutX="-21.0" layoutY="140.0" prefHeight="61.0" prefWidth="986.0" style="-fx-border-color: #000;" />
