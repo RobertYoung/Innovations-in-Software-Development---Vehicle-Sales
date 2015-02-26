@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -21,7 +22,9 @@ import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.CheckBox;
@@ -136,6 +139,7 @@ public class FXMLDocumentController implements Initializable {
         this.setupYearComboBox();
         this.setupPieChart();
         this.setupBarChart();
+        this.setupLineChart();
         this.setupChartSelection();
     }
     
@@ -302,7 +306,50 @@ public class FXMLDocumentController implements Initializable {
         {
             this.barChart.setTitle("Please select a year(s)");
         }else{
-            this.barChart.setTitle("Vehicle Sales");
+            this.barChart.setTitle("Sales Figures By Vehicle");
+        }
+    }
+    
+    //**********************//
+    // LINE CHART FUNCTIONS //
+    //**********************//
+    private void setupLineChart()
+    {
+        this.constructLineChart();
+    }
+    
+    private void constructLineChart()
+    {
+        final CategoryAxis xAxis = new CategoryAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        
+        xAxis.setLabel("Regions");
+        yAxis.setLabel("Sales");
+        
+        //List<String> yea = this.sales.stream().map(x -> x.getRegion()).distinct().collect(Collectors.toList());
+        
+        for (int year : this.years)
+        {
+            XYChart.Series series = new XYChart.Series();
+            
+            List<Integer> quarters = this.sales.stream().filter(x -> x.getYear() == year).map(x -> x.getQTR()).distinct().collect(Collectors.toList());
+                        
+            for (Integer quarter : quarters)
+            {
+                double quantity = this.sales.stream().filter(x -> x.getYear() == year).filter(x -> x.getQTR() == quarter).mapToDouble(x -> x.getQuantity()).sum(); 
+                
+                series.getData().add(new XYChart.Data(year + " | Q" + quarter, quantity));
+            }
+            
+            /*
+            double quantity = this.sales.stream().filter(x -> x.getRegion().equals(region)).mapToDouble(x -> x.getQuantity()).sum();
+            
+            series.getData().add(new XYChart.Data(region, quantity));
+            */
+            
+            
+            
+            this.lineChart.getData().add(series);
         }
     }
     
