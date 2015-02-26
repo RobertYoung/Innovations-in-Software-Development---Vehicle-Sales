@@ -394,16 +394,7 @@ public class FXMLDocumentController implements Initializable {
     //***************************//
     private void setupTableView()
     {
-        this.searchedSales = FXCollections.observableList(new LinkedList<Sales>());
-        this.searchedSales.addListener(new ListChangeListener()
-        {
-
-            @Override
-            public void onChanged(ListChangeListener.Change c) {
-                constuctTableView();
-            }
-            
-        });
+        this.searchedSales = FXCollections.observableArrayList(this.sales);
         
         List<String> saleProperties = new LinkedList<String>();     
 
@@ -433,12 +424,7 @@ public class FXMLDocumentController implements Initializable {
     private void constuctTableView()
     {
         this.tvData.getItems().clear();
-        
-        List<Sales> tableSales = this.searchedSales.size() == 0 ? this.sales : this.searchedSales;
-        
-        ObservableList<Sales> salesData = FXCollections.observableArrayList(tableSales);
-        
-        this.tvData.setItems(salesData);
+        this.tvData.setItems(FXCollections.observableArrayList(this.searchedSales));
     }
     
     //******************//
@@ -453,12 +439,18 @@ public class FXMLDocumentController implements Initializable {
         }
         
         String textEntered = this.txtSearchInput.getText().toLowerCase();
-        this.searchedSales.addAll(FXCollections.observableArrayList(this.sales.stream().filter(x -> x.getRegion().toLowerCase().contains(textEntered)).collect(Collectors.toList())));
+        List<Sales> searchedData = this.sales.stream().filter(x -> x.getRegion().toLowerCase().contains(textEntered) || x.getVehicle().toLowerCase().contains(textEntered)).collect(Collectors.toList());
+        
+        this.searchedSales.clear();
+        this.searchedSales.addAll(searchedData);
+        this.constuctTableView();
     }
     
     public void resetButtonClicked()
     {
         this.txtSearchInput.clear();
         this.searchedSales.clear();
+        this.searchedSales = FXCollections.observableArrayList(this.sales);
+        this.constuctTableView();
     }
 }
