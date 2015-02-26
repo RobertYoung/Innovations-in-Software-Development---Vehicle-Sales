@@ -5,7 +5,9 @@
  */
 package vehiclesfxml;
 
+import java.lang.reflect.Method;
 import java.net.URL;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -22,21 +24,22 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 
 /**
  *
@@ -53,6 +56,7 @@ public class FXMLDocumentController implements Initializable {
     private HBox hBoxYearCheckboxes;
     private HBox hBoxChartSelection;
     private Pane paneCharts;
+    private VBox vBoxViewData;
     
     // Combo boxes
     private ComboBox comboBoxYears;
@@ -79,6 +83,10 @@ public class FXMLDocumentController implements Initializable {
     // Scene variables
     private Scene scene;
     
+    // View data
+    private TableView tvData;
+    private TableColumn colYear;
+    
     // Checkboxes
     CheckBox[] yearCheckBoxes;
     
@@ -89,6 +97,7 @@ public class FXMLDocumentController implements Initializable {
         this.vBoxLeft = (VBox)this.paneCharts.lookup("#vBoxLeft");
         this.hBoxYearCheckboxes = (HBox)this.vBoxLeft.lookup("#hBoxYearCheckboxes");
         this.hBoxChartSelection = (HBox)this.vBoxLeft.lookup("#hBoxChartSelection");
+        this.vBoxViewData = (VBox)this.anchorPane.lookup("#vBoxViewData");
         
         // Checkboxes
         this.comboBoxYears = (ComboBox)this.vBoxLeft.lookup("#comboBoxYears");
@@ -107,6 +116,9 @@ public class FXMLDocumentController implements Initializable {
         this.pieChart = (PieChart)this.panePieChart.lookup("#pieChart");
         this.barChart = (BarChart)this.paneBarChart.lookup("#barChart");
         this.lineChart = (LineChart)this.paneLineChart.lookup("#lineChart");
+        
+        // View data
+        this.tvData = (TableView)this.vBoxViewData.lookup("#tvData");
     }    
     
     //*****************//
@@ -142,6 +154,7 @@ public class FXMLDocumentController implements Initializable {
         this.setupBarChart();
         this.setupLineChart();
         this.setupChartSelection();
+        this.setupTableView();
     }
     
     //***************************//
@@ -370,5 +383,44 @@ public class FXMLDocumentController implements Initializable {
                 comboBoxYears.disableProperty().set(!newValue);
             }            
         });
+    }
+    
+    //***************************//
+    // TABLE VIEW DATA FUNCTIONS //
+    //***************************//
+    private void setupTableView()
+    {
+        List<String> saleProperties = new LinkedList<String>();
+        
+        for (Method method : Sales.class.getMethods())
+        {
+            if (method.getName().startsWith("get") && !method.getName().endsWith("Class"))
+            {
+                saleProperties.add(method.getName().replace("get", ""));
+            }
+        }
+        
+        for (String property : saleProperties)
+        {
+            TableColumn column = new TableColumn(property);
+            
+            column.setCellValueFactory(new PropertyValueFactory<Sales, String>(property));
+            column.prefWidthProperty().bind(this.tvData.widthProperty().divide(saleProperties.size()));
+            
+            this.tvData.getColumns().add(column);
+        }        
+        
+        this.tvData.setColumnResizePolicy((param) -> true);
+        
+        this.constuctTableView();
+    }
+    
+    private void constuctTableView()
+    {
+        this.tvData.getItems().clear();
+        
+        ObservableList<Sales> salesData = FXCollections.observableArrayList(this.sales);
+        
+        this.tvData.setItems(salesData);
     }
 }
