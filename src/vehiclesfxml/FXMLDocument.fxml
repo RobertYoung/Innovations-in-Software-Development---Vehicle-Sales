@@ -33,7 +33,7 @@
          <children>
             <HBox id="hBoxYearCheckboxes" fx:id="hBoxYearCheckboxes" prefHeight="45.0" prefWidth="459.0">
                <children>
-                  <ComboBox fx:id="comboBoxYears" prefWidth="150.0" />
+                  <ComboBox fx:id="comboBoxYears" onAction="#setupPieChart" prefWidth="150.0" />
                </children></HBox>
             <PieChart fx:id="pieChart" />
          </children></VBox>

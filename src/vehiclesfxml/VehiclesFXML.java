@@ -52,13 +52,13 @@ public class VehiclesFXML extends Application {
             stage.show();
             
             fxml = fxmlLoader.getController();
+            this.fxml.setScene(scene);
+            this.getSalesData();
+            this.fxml.setSalesData(sales);
+            this.fxml.setupUserInterface();
         }catch (IOException e) {
             e.printStackTrace();
         }
-        
-        this.getSalesData();
-        this.fxml.setSalesData(sales);
-        this.fxml.setupUserInterface();
     }
     
     //**********************//

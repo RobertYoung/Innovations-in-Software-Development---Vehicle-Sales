@@ -11,11 +11,18 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -35,12 +42,28 @@ public class FXMLDocumentController implements Initializable {
     private List<Sales> sales;
     private List<Integer> years;
     
+    // Scene variables
+    private Scene scene;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.hBoxYearCheckboxes = (HBox)this.vBoxLeft.lookup("#hBoxYearCheckboxes");
         this.pieChart = (PieChart)this.vBoxLeft.lookup("#pieChart");
         this.comboBoxYears = (ComboBox)this.vBoxLeft.lookup("#comboBoxYears");
     }    
+    
+    //*****************//
+    // SCENE FUNCTIONS //
+    //*****************//
+    public void setScene(Scene scene)
+    {
+        this.scene = scene;
+    }
+    
+    private ObservableList<Node> getChildren()
+    {
+        return ((AnchorPane) scene.getRoot()).getChildren();
+    }
     
     //**********************//
     // SALES DATA FUNCTIONS //
@@ -57,8 +80,8 @@ public class FXMLDocumentController implements Initializable {
     public void setupUserInterface()
     {
         this.setupYearCheckboxes();
-        this.setupPieChart();
         this.setupYearComboBox();
+        this.setupPieChart();
     }
     
     //***************************//
@@ -97,22 +120,82 @@ public class FXMLDocumentController implements Initializable {
     //*********************//
     public void setupPieChart()
     {
-        /*
-        ObservableList<PieChart.Data> pieChartData =
-                FXCollections.observableArrayList(
-                new PieChart.Data("Grapefruit", 13),
-                new PieChart.Data("Oranges", 25),
-                new PieChart.Data("Plums", 10),
-                new PieChart.Data("Pears", 22),
-                new PieChart.Data("Apples", 30));
-        */
+        int year = Integer.parseInt((String)this.comboBoxYears.getValue());
+        List<Sales> yearData = this.sales.stream().filter(x -> x.getYear() == year).collect(Collectors.toList());
         
-        System.out.println(this.comboBoxYears.getValue());
+        int qtr1 = 0;
+        int qtr2 = 0;
+        int qtr3 = 0;
+        int qtr4 = 0;
         
-        ObservableList<PieChart.Data> data = FXCollections.observableArrayList(
-                    new PieChart.Data("A", 15),
-                    new PieChart.Data("B", 40));
+        for (Sales sale : yearData)
+        {
+            switch (sale.getQTR())
+            {
+                case 1:
+                    qtr1 += sale.getQuantity();
+                    break;
+                case 2:
+                    qtr2 += sale.getQuantity();
+                    break;
+                case 3:
+                    qtr3 += sale.getQuantity();
+                    break;
+                case 4:
+                    qtr4 += sale.getQuantity();
+                    break;
+            }
+        }
         
-        this.pieChart.setData(data);
+        ObservableList<PieChart.Data> pieData = FXCollections.observableArrayList(
+                    new PieChart.Data("Quarter 1", qtr1),
+                    new PieChart.Data("Quarter 2", qtr2),
+                    new PieChart.Data("Quarter 3", qtr3),
+                    new PieChart.Data("Quarter 4", qtr4)
+                );
+        
+        this.pieChart.setData(pieData);
+        
+
+        for (int i = 0; i < pieData.size(); i++)
+        {
+            PieChart.Data qtr = pieData.get(i);
+            Label caption = new Label("");
+            
+            qtr.getNode().addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>(){
+
+                @Override
+                public void handle(MouseEvent e) {
+                
+                    Bounds bounds = qtr.getNode().getBoundsInParent();
+                    
+                    caption.setTranslateX(bounds.getMaxX() - 70);
+                    caption.setTranslateY(bounds.getMaxY() + 180);
+                    caption.setText(String.valueOf(((int)qtr.getPieValue())));
+                    ObservableList<Node> children = getChildren();
+                    
+                    if (children.indexOf(caption) == -1)
+                         getChildren().add(caption);
+                    else{
+                        caption.visibleProperty().set(true);
+                    }
+                }
+            });
+            
+            qtr.getNode().addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>(){
+
+                @Override
+                public void handle(MouseEvent e) {
+                
+                    ObservableList<Node> children = getChildren();
+                    
+                    if (children.indexOf(caption) != -1)
+                         caption.visibleProperty().set(false);
+                }
+            });
+        }
+        
+        this.pieChart.labelsVisibleProperty().set(true);
+        this.pieChart.setTitle("Quarterly Sales Figues for " + year);
     }
 }
