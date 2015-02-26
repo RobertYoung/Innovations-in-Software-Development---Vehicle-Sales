@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -33,13 +34,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 
 /**
  *
@@ -79,6 +80,7 @@ public class FXMLDocumentController implements Initializable {
     // Sales variables
     private List<Sales> sales;
     private List<Integer> years;
+    private ObservableList<Sales> searchedSales;
     
     // Scene variables
     private Scene scene;
@@ -86,6 +88,7 @@ public class FXMLDocumentController implements Initializable {
     // View data
     private TableView tvData;
     private TableColumn colYear;
+    private TextField txtSearchInput;
     
     // Checkboxes
     CheckBox[] yearCheckBoxes;
@@ -119,6 +122,7 @@ public class FXMLDocumentController implements Initializable {
         
         // View data
         this.tvData = (TableView)this.vBoxViewData.lookup("#tvData");
+        this.txtSearchInput = (TextField)this.vBoxViewData.lookup("#txtSearchInput");
     }    
     
     //*****************//
@@ -390,8 +394,19 @@ public class FXMLDocumentController implements Initializable {
     //***************************//
     private void setupTableView()
     {
-        List<String> saleProperties = new LinkedList<String>();
+        this.searchedSales = FXCollections.observableList(new LinkedList<Sales>());
+        this.searchedSales.addListener(new ListChangeListener()
+        {
+
+            @Override
+            public void onChanged(ListChangeListener.Change c) {
+                constuctTableView();
+            }
+            
+        });
         
+        List<String> saleProperties = new LinkedList<String>();     
+
         for (Method method : Sales.class.getMethods())
         {
             if (method.getName().startsWith("get") && !method.getName().endsWith("Class"))
@@ -403,10 +418,10 @@ public class FXMLDocumentController implements Initializable {
         for (String property : saleProperties)
         {
             TableColumn column = new TableColumn(property);
-            
+
             column.setCellValueFactory(new PropertyValueFactory<Sales, String>(property));
-            column.prefWidthProperty().bind(this.tvData.widthProperty().divide(saleProperties.size()));
-            
+            column.prefWidthProperty().bind(this.tvData.widthProperty().divide(saleProperties.size())); 
+                        
             this.tvData.getColumns().add(column);
         }        
         
@@ -419,8 +434,31 @@ public class FXMLDocumentController implements Initializable {
     {
         this.tvData.getItems().clear();
         
-        ObservableList<Sales> salesData = FXCollections.observableArrayList(this.sales);
+        List<Sales> tableSales = this.searchedSales.size() == 0 ? this.sales : this.searchedSales;
+        
+        ObservableList<Sales> salesData = FXCollections.observableArrayList(tableSales);
         
         this.tvData.setItems(salesData);
+    }
+    
+    //******************//
+    // SEARCH FUNCTIONS //
+    //******************//
+    public void searchButtonClicked()
+    {
+        if (this.txtSearchInput.getText().isEmpty())
+        {
+            System.out.println("No text entered");
+            return;
+        }
+        
+        String textEntered = this.txtSearchInput.getText().toLowerCase();
+        this.searchedSales.addAll(FXCollections.observableArrayList(this.sales.stream().filter(x -> x.getRegion().toLowerCase().contains(textEntered)).collect(Collectors.toList())));
+    }
+    
+    public void resetButtonClicked()
+    {
+        this.txtSearchInput.clear();
+        this.searchedSales.clear();
     }
 }
