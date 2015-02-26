@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.chart.*?>
 <?import java.lang.*?>
@@ -56,7 +57,10 @@
                   </VBox>
                   <HBox id="hBoxYearCheckboxes" fx:id="hBoxYearCheckboxes" alignment="TOP_CENTER" prefHeight="45.0" prefWidth="459.0">
                      <children>
-                        <ComboBox fx:id="comboBoxYears" onAction="#setupPieChart" prefWidth="150.0" />
+                        <ComboBox fx:id="comboBoxYears" onAction="#setupPieChart" prefWidth="150.0">
+                           <HBox.margin>
+                              <Insets left="30.0" right="30.0" />
+                           </HBox.margin></ComboBox>
                      </children>
                   </HBox>
                </children>

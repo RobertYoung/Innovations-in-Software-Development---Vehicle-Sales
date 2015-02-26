@@ -9,7 +9,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -19,6 +18,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
@@ -29,6 +29,7 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.input.MouseEvent;
@@ -159,6 +160,7 @@ public class FXMLDocumentController implements Initializable {
                 @Override
                 public void handle(ActionEvent event) {
                     constructBarChart();
+                    constructLineChart();
                 }
             });
         }
@@ -306,7 +308,7 @@ public class FXMLDocumentController implements Initializable {
         {
             this.barChart.setTitle("Please select a year(s)");
         }else{
-            this.barChart.setTitle("Sales Figures By Vehicle");
+            this.barChart.setTitle("Sales Figures by Vehicle");
         }
     }
     
@@ -315,41 +317,35 @@ public class FXMLDocumentController implements Initializable {
     //**********************//
     private void setupLineChart()
     {
+        this.lineChart.setTitle("Vehicle Sales by Year");
         this.constructLineChart();
     }
     
     private void constructLineChart()
     {
-        final CategoryAxis xAxis = new CategoryAxis();
-        final NumberAxis yAxis = new NumberAxis();
+        this.lineChart.getData().clear();
         
-        xAxis.setLabel("Regions");
-        yAxis.setLabel("Sales");
-        
-        //List<String> yea = this.sales.stream().map(x -> x.getRegion()).distinct().collect(Collectors.toList());
-        
-        for (int year : this.years)
+        for (CheckBox cb : this.yearCheckBoxes)
         {
-            XYChart.Series series = new XYChart.Series();
-            
-            List<Integer> quarters = this.sales.stream().filter(x -> x.getYear() == year).map(x -> x.getQTR()).distinct().collect(Collectors.toList());
-                        
-            for (Integer quarter : quarters)
+            if (cb.isSelected())
             {
-                double quantity = this.sales.stream().filter(x -> x.getYear() == year).filter(x -> x.getQTR() == quarter).mapToDouble(x -> x.getQuantity()).sum(); 
-                
-                series.getData().add(new XYChart.Data(year + " | Q" + quarter, quantity));
+                int year = Integer.parseInt(cb.getText());
+                XYChart.Series series = new XYChart.Series();
+            
+                series.setName(cb.getText());
+
+                List<Integer> quarters = this.sales.stream().filter(x -> x.getYear() == year).map(x -> x.getQTR()).distinct().collect(Collectors.toList());
+
+                for (Integer quarter : quarters)
+                {
+                    double quantity = this.sales.stream().filter(x -> x.getYear() == year).filter(x -> x.getQTR() == quarter).mapToDouble(x -> x.getQuantity()).sum(); 
+
+                    series.getData().add(new XYChart.Data("Q" + quarter, quantity));
+                }
+
+                this.lineChart.getData().add(series);
+                this.lineChart.setCursor(Cursor.CROSSHAIR);
             }
-            
-            /*
-            double quantity = this.sales.stream().filter(x -> x.getRegion().equals(region)).mapToDouble(x -> x.getQuantity()).sum();
-            
-            series.getData().add(new XYChart.Data(region, quantity));
-            */
-            
-            
-            
-            this.lineChart.getData().add(series);
         }
     }
     
