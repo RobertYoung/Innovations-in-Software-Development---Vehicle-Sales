@@ -9,24 +9,19 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="768.0" prefWidth="1024.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="vehiclesfxml.FXMLDocumentController">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="768.0" prefWidth="1024.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="vehiclesfxml.DashboardController">
   <children>
     <HBox fx:id="topHBox" layoutX="14.0" layoutY="37.0" prefHeight="129.0" prefWidth="986.0" style="-fx-border-color: #000;" />
     <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="1024.0">
       <menus>
         <Menu mnemonicParsing="false" onAction="#closeApplication" text="File">
           <items>
-            <MenuItem mnemonicParsing="false" text="Close" />
-          </items>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Edit">
-          <items>
-            <MenuItem mnemonicParsing="false" text="Delete" />
+            <MenuItem mnemonicParsing="false" text="Exit" />
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
           <items>
-            <MenuItem mnemonicParsing="false" text="About" />
+            <MenuItem mnemonicParsing="false" onAction="#displayAboutInfo" text="About" />
           </items>
         </Menu>
       </menus>
