@@ -26,25 +26,34 @@
         </Menu>
       </menus>
     </MenuBar>
-    <HBox fx:id="topHBox" alignment="TOP_LEFT" layoutX="13.0" layoutY="37.0" prefHeight="129.0" prefWidth="986.0" style="-fx-border-color: #000;">
+    <Pane layoutX="14.0" layoutY="39.0" prefHeight="133.0" prefWidth="986.0" style="-fx-border-color: #000;&#10;">
       <children>
-        <ImageView fx:id="ivLogo" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+        <HBox fx:id="topHBox" alignment="TOP_LEFT" layoutX="221.0" layoutY="14.0" minHeight="36.0" prefHeight="36.0" prefWidth="754.0" style="&#10;">
+          <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefWidth="569.0" text="Lotus Sales Dashboard" textAlignment="CENTER" textOverrun="ELLIPSIS" wrapText="true">
+              <font>
+                <Font size="25.0" />
+              </font>
+            </Label>
+            <Label fx:id="lblDateTime" alignment="CENTER_RIGHT" prefHeight="25.000099999997474" prefWidth="193.0" text="Time" textAlignment="RIGHT">
+              <HBox.margin>
+                <Insets right="10.0" />
+              </HBox.margin>
+            </Label>
+          </children>
+        </HBox>
+        <HBox alignment="BOTTOM_RIGHT" layoutX="14.0" layoutY="77.0" prefHeight="40.0" prefWidth="951.0">
+          <children>
+            <Button mnemonicParsing="false" onAction="#refresh" text="Refresh" />
+          </children>
+        </HBox>
+        <ImageView fx:id="ivLogo" fitHeight="105.0" fitWidth="140.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
           <image>
             <Image url="@../../assets/lotus.png" />
           </image>
         </ImageView>
-        <Label alignment="CENTER" contentDisplay="CENTER" prefWidth="721.0" text="Lotus Sales Dashboard" textAlignment="CENTER" textOverrun="ELLIPSIS" wrapText="true">
-          <font>
-            <Font size="25.0" />
-          </font>
-        </Label>
-        <Label fx:id="lblDateTime" alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="150.0" text="Time" textAlignment="RIGHT">
-          <HBox.margin>
-            <Insets right="10.0" />
-          </HBox.margin>
-        </Label>
       </children>
-    </HBox>
+    </Pane>
     <Pane fx:id="paneCharts" layoutX="14.0" layoutY="188.0" prefHeight="461.0" prefWidth="461.0" style="-fx-border-color: #000;">
       <children>
         <VBox fx:id="vBoxLeft" prefHeight="76.0" prefWidth="461.0">

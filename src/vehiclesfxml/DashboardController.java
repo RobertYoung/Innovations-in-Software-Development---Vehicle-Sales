@@ -627,6 +627,11 @@ public class DashboardController implements Initializable {
         aboutController.setScene(aboutScene);
     }
     
+    public void refresh()
+    {
+        System.out.println("Refresh");
+    }
+    
     //*********************//
     // DATE TIME FUNCTIONS //
     //*********************//
