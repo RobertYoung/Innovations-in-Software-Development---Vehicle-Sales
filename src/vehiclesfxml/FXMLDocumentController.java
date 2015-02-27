@@ -10,7 +10,11 @@ import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -99,7 +103,9 @@ public class FXMLDocumentController implements Initializable {
     private TableColumn colYear;
     private TextField txtSearchInput;
     private List<CheckBox> cbFilters;
-    private Boolean search = false;
+    private BooleanProperty search = new SimpleBooleanProperty(false);
+    private Button btnReset;
+    private Button btnSearch;
     
     // Checkboxes
     CheckBox[] yearCheckBoxes;
@@ -135,6 +141,10 @@ public class FXMLDocumentController implements Initializable {
         // View data
         this.tvData = (TableView)this.vBoxViewData.lookup("#tvData");
         this.txtSearchInput = (TextField)this.vBoxViewData.lookup("#txtSearchInput");
+        this.btnReset = (Button)this.anchorPane.lookup("#btnReset");
+        this.btnReset.setDisable(true);
+        this.btnSearch = (Button)this.anchorPane.lookup("#btnSearch");
+        this.btnSearch.setDefaultButton(true);
     }    
     
     //*****************//
@@ -488,12 +498,14 @@ public class FXMLDocumentController implements Initializable {
         this.tvData.getItems().clear();
         this.saleTableData = FXCollections.observableArrayList(this.sales);
         
-        if (this.search)
+        if (this.search.get())
         {
-            this.search = false;
+            this.search.set(false);
             this.tvData.setItems(FXCollections.observableArrayList(this.searchedSales));
             return;
         }
+        
+        //this.btnReset.setDisable(true);
         
         if (this.cbFilters != null)
         {
@@ -525,7 +537,8 @@ public class FXMLDocumentController implements Initializable {
            return;
         }
         
-        this.search = true;
+        this.btnReset.setDisable(false);
+        this.search.set(true);
         
         this.cbFilters.forEach(x -> {
             x.setSelected(true);
@@ -545,6 +558,7 @@ public class FXMLDocumentController implements Initializable {
         this.saleTableData.clear();
         this.saleTableData = FXCollections.observableArrayList(this.sales);
         this.constructTableView();
+        this.btnReset.setDisable(true);
     }
     
     //************************//
@@ -563,5 +577,35 @@ public class FXMLDocumentController implements Initializable {
         dialogStage.setScene(new Scene(VBoxBuilder.create().children(txtDescription, btnOk).alignment(Pos.CENTER).padding(new Insets(10)).build()));
         dialogStage.initModality(Modality.APPLICATION_MODAL);
         dialogStage.show();
+    }
+    
+    //***********************//
+    // APPLICATION FUNCTIONS //
+    //***********************//
+    public void closeApplication()
+    {
+        Stage dialogStage = new Stage();
+        HBox hBoxCloseButtons = new HBox();
+        Button btnCancel = new Button("Cancel");
+        Button btnOk = new Button("Ok");
+        Text txtDescription = new Text("Are you sure you want to exit?");
+
+        btnCancel.setPadding(new Insets(10, 10, 10, 10));
+        btnCancel.setOnAction((event) -> {
+            dialogStage.close();
+        });
+        
+        btnOk.setPadding(new Insets(10, 10, 10, 10));
+        btnOk.setOnAction((event) -> {
+             Platform.exit();
+        });
+        
+        hBoxCloseButtons.setAlignment(Pos.CENTER);
+        hBoxCloseButtons.setPadding(new Insets(10, 10, 10, 10));
+        hBoxCloseButtons.getChildren().addAll(btnCancel, btnOk);
+
+        dialogStage.setScene(new Scene(VBoxBuilder.create().children(txtDescription, hBoxCloseButtons).alignment(Pos.CENTER).padding(new Insets(30)).build()));
+        dialogStage.initModality(Modality.APPLICATION_MODAL);
+        dialogStage.show();   
     }
 }

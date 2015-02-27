@@ -14,7 +14,7 @@
     <HBox fx:id="topHBox" layoutX="14.0" layoutY="37.0" prefHeight="129.0" prefWidth="986.0" style="-fx-border-color: #000;" />
     <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="1024.0">
       <menus>
-        <Menu mnemonicParsing="false" text="File">
+        <Menu mnemonicParsing="false" onAction="#closeApplication" text="File">
           <items>
             <MenuItem mnemonicParsing="false" text="Close" />
           </items>
@@ -128,12 +128,12 @@
         <HBox alignment="CENTER_RIGHT" prefHeight="36.0" prefWidth="513.0">
           <children>
             <TextField fx:id="txtSearchInput" prefWidth="352.0" promptText="Enter a keyword" />
-            <Button mnemonicParsing="false" onAction="#searchButtonClicked" text="Search">
+            <Button fx:id="btnSearch" mnemonicParsing="false" onAction="#searchButtonClicked" text="Search">
               <HBox.margin>
                 <Insets left="10.0" right="10.0" />
               </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#resetButtonClicked" text="Reset">
+            <Button fx:id="btnReset" mnemonicParsing="false" onAction="#resetButtonClicked" text="Reset">
               <HBox.margin>
                 <Insets right="10.0" />
               </HBox.margin>
