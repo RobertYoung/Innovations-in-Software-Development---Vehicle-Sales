@@ -8,14 +8,18 @@ package vehiclesfxml;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -44,6 +48,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -53,6 +59,7 @@ import javafx.scene.layout.VBoxBuilder;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  *
@@ -99,6 +106,10 @@ public class DashboardController implements Initializable {
     
     // Scene variables
     private Scene scene;
+    
+    // Top nav bar
+    private Label lblDateTime;
+    private ImageView ivLogo;
     
     // View data
     private TableView tvData;
@@ -147,6 +158,10 @@ public class DashboardController implements Initializable {
         this.btnReset.setDisable(true);
         this.btnSearch = (Button)this.anchorPane.lookup("#btnSearch");
         this.btnSearch.setDefaultButton(true);
+        
+        // Top nav bar
+        this.lblDateTime = (Label)this.anchorPane.lookup("#lblDateTime");
+        this.ivLogo = (ImageView)this.anchorPane.lookup("#ivLogo");
     }    
     
     //*****************//
@@ -184,6 +199,8 @@ public class DashboardController implements Initializable {
         this.setupChartSelection();
         this.setupTableView();
         this.setupFilterTableData();
+        this.setupDateTimeLabel();
+        this.setupLogo();
     }
     
     //***************************//
@@ -265,7 +282,6 @@ public class DashboardController implements Initializable {
         
         this.pieChart.setData(pieData);
         
-
         for (int i = 0; i < pieData.size(); i++)
         {
             PieChart.Data qtr = pieData.get(i);
@@ -329,15 +345,6 @@ public class DashboardController implements Initializable {
                 
                 series.setName(cb.getText());
                 
-                /*
-                for (Sales sale : this.sales)
-                {
-                    if (sale.getYear() == Integer.parseInt(cb.getText()))
-                    {
-                        series.getData().add(new XYChart.Data<>(sale.getVehicle(), sale.getQuantity()));
-                    }
-                }*/
-                
                 this.sales.stream().filter(x -> x.getYear() == Integer.parseInt(cb.getText())).forEach(x -> {
                     series.getData().add(new XYChart.Data<>(x.getVehicle(), x.getQuantity()));
                 });
@@ -396,22 +403,18 @@ public class DashboardController implements Initializable {
     //***************************//
     private void setupChartSelection()
     {
+        this.pieChart.visibleProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            for (CheckBox cb : yearCheckBoxes)
+            {
+                cb.disableProperty().set(newValue);
+            }
+            
+            comboBoxYears.disableProperty().set(!newValue);            
+        });
+        
         this.pieChart.visibleProperty().bind(this.rbPieChart.selectedProperty());
         this.barChart.visibleProperty().bind(this.rbBarChart.selectedProperty());
         this.lineChart.visibleProperty().bind(this.rbLineChart.selectedProperty());
-        
-        this.pieChart.visibleProperty().addListener(new ChangeListener<Boolean>()
-        {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                for (CheckBox cb : yearCheckBoxes)
-                {
-                    cb.disableProperty().set(newValue);
-                }
-                
-                comboBoxYears.disableProperty().set(!newValue);
-            }            
-        });
     }
     
     //*****************************//
@@ -622,5 +625,31 @@ public class DashboardController implements Initializable {
         aboutStage.setScene(aboutScene);
         aboutStage.show();
         aboutController.setScene(aboutScene);
+    }
+    
+    //*********************//
+    // DATE TIME FUNCTIONS //
+    //*********************//
+    private void setupDateTimeLabel()
+    {
+        DateFormat format = DateFormat.getInstance();
+        
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), (ActionEvent event) -> {
+            Calendar calendar = Calendar.getInstance();
+            
+            lblDateTime.setText(format.format(calendar.getTime()));
+        }));
+        
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+    }
+    
+    //*****************//
+    // IMAGE FUNCTIONS //
+    //*****************//
+    private void setupLogo() {
+        Image logo = new Image(getClass().getResource("lotus.png").toExternalForm());
+        
+        this.ivLogo.setImage(logo);
     }
 }

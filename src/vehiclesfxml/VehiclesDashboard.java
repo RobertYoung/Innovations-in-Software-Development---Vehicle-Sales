@@ -47,7 +47,7 @@ public class VehiclesDashboard extends Application {
             Parent root = fxmlLoader.load();            
             Scene scene = new Scene(root, 1024, 768);
 
-            stage.setTitle("Vehicles Sales Dashboard");
+            stage.setTitle("| LOTUS | Vehicles Sales Dashboard |");
             stage.setScene(scene);
             stage.show();
             
