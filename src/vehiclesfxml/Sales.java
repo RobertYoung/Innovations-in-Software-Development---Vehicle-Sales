@@ -5,6 +5,10 @@
  */
 package vehiclesfxml;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -136,5 +140,31 @@ public class Sales {
                 ("Region: " + this.getRegion()),
                 ("Vehicle: " + this.getVehicle()),
                 ("Year: " + this.getYear()));
+    }
+    
+    public String getValueFromString(String property)
+    {
+        for (Method method : this.getClass().getMethods())
+        {
+            if (method.getName().equals("get" + property))
+            {
+                try {
+                    Object value = method.invoke(this, null);                    
+                    
+                    if (value != null)
+                        return value.toString();
+                    
+                    return "";
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(Sales.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(Sales.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvocationTargetException ex) {
+                    Logger.getLogger(Sales.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        
+        return "";
     }
 }

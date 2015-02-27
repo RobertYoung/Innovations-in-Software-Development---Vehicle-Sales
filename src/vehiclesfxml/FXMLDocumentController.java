@@ -14,13 +14,13 @@ import java.util.stream.Collectors;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -58,6 +58,7 @@ public class FXMLDocumentController implements Initializable {
     private HBox hBoxChartSelection;
     private Pane paneCharts;
     private VBox vBoxViewData;
+    private VBox vBoxFilter;
     
     // Combo boxes
     private ComboBox comboBoxYears;
@@ -80,7 +81,9 @@ public class FXMLDocumentController implements Initializable {
     // Sales variables
     private List<Sales> sales;
     private List<Integer> years;
-    private ObservableList<Sales> searchedSales;
+    private ObservableList<Sales> saleTableData;
+    private List<String> saleProperties;
+    private List<Sales> searchedSales;
     
     // Scene variables
     private Scene scene;
@@ -89,6 +92,8 @@ public class FXMLDocumentController implements Initializable {
     private TableView tvData;
     private TableColumn colYear;
     private TextField txtSearchInput;
+    private List<CheckBox> cbFilters;
+    private Boolean search = false;
     
     // Checkboxes
     CheckBox[] yearCheckBoxes;
@@ -101,6 +106,7 @@ public class FXMLDocumentController implements Initializable {
         this.hBoxYearCheckboxes = (HBox)this.vBoxLeft.lookup("#hBoxYearCheckboxes");
         this.hBoxChartSelection = (HBox)this.vBoxLeft.lookup("#hBoxChartSelection");
         this.vBoxViewData = (VBox)this.anchorPane.lookup("#vBoxViewData");
+        this.vBoxFilter = (VBox)this.anchorPane.lookup("#vBoxFilter");
         
         // Checkboxes
         this.comboBoxYears = (ComboBox)this.vBoxLeft.lookup("#comboBoxYears");
@@ -159,6 +165,7 @@ public class FXMLDocumentController implements Initializable {
         this.setupLineChart();
         this.setupChartSelection();
         this.setupTableView();
+        this.setupFilterTableData();
     }
     
     //***************************//
@@ -389,18 +396,67 @@ public class FXMLDocumentController implements Initializable {
         });
     }
     
+    //*****************************//
+    // FILTER TABLE DATA FUNCTIONS //
+    //*****************************//
+    private void setupFilterTableData()
+    {
+        this.cbFilters = new LinkedList<CheckBox>();
+        
+        for (String property : this.saleProperties)
+        {
+            if (property.equals("Quantity"))
+                continue;
+            
+            // Hbox for filters
+            HBox hBox = new HBox();
+            
+            hBox.setPadding(new Insets(2, 10, 2, 10));
+            
+            // Add label
+            Label label = new Label(property);
+            label.setPadding(new Insets(2, 10, 2, 0));
+            hBox.getChildren().add(label);
+            
+            // Get distinct data
+            List<String> data = this.sales.stream().map(x -> x.getValueFromString(property)).distinct().collect(Collectors.toList());
+            
+            List<CheckBox> filters = new LinkedList<CheckBox>();
+            
+            for (int i = 0; i < data.size(); i++)
+            {
+                String filter = data.get(i);
+                CheckBox cb = new CheckBox(filter);
+                cb.setSelected(true);
+                cb.setId(property);
+                cb.addEventFilter(ActionEvent.ACTION, (ActionEvent event) -> {
+                    constructTableView();
+                });
+                
+                filters.add(cb);
+            }
+            
+            this.cbFilters.addAll(filters);
+            
+            hBox.getChildren().addAll(filters);
+          
+            // Add to filter box
+            this.vBoxFilter.getChildren().add(hBox);
+        }
+    }
+    
     //***************************//
     // TABLE VIEW DATA FUNCTIONS //
     //***************************//
     private void setupTableView()
     {
-        this.searchedSales = FXCollections.observableArrayList(this.sales);
+        this.saleTableData = FXCollections.observableArrayList(this.sales);
         
-        List<String> saleProperties = new LinkedList<String>();     
+        saleProperties = new LinkedList<String>();     
 
         for (Method method : Sales.class.getMethods())
         {
-            if (method.getName().startsWith("get") && !method.getName().endsWith("Class"))
+            if (method.getName().startsWith("get") && !method.getName().endsWith("Class") && !method.getName().equals("getValueFromString"))
             {
                 saleProperties.add(method.getName().replace("get", ""));
             }
@@ -418,13 +474,37 @@ public class FXMLDocumentController implements Initializable {
         
         this.tvData.setColumnResizePolicy((param) -> true);
         
-        this.constuctTableView();
+        this.constructTableView();
     }
     
-    private void constuctTableView()
+    private void constructTableView()
     {
         this.tvData.getItems().clear();
-        this.tvData.setItems(FXCollections.observableArrayList(this.searchedSales));
+        this.saleTableData = FXCollections.observableArrayList(this.sales);
+        
+        if (this.search)
+        {
+            this.search = false;
+            this.tvData.setItems(FXCollections.observableArrayList(this.searchedSales));
+            return;
+        }
+        
+        if (this.cbFilters != null)
+        {
+            for (CheckBox cb : this.cbFilters)
+            {
+                if (!cb.isSelected())
+                {
+                    for (int index = saleTableData.size() - 1; index >= 0; index--)
+                    {
+                        if (saleTableData.get(index).getValueFromString(cb.getId()).equals(cb.getText()))
+                            saleTableData.remove(index);
+                    } 
+                }
+            }   
+        }
+        
+        this.tvData.setItems(FXCollections.observableArrayList(this.saleTableData));
     }
     
     //******************//
@@ -438,19 +518,27 @@ public class FXMLDocumentController implements Initializable {
             return;
         }
         
-        String textEntered = this.txtSearchInput.getText().toLowerCase();
-        List<Sales> searchedData = this.sales.stream().filter(x -> x.getRegion().toLowerCase().contains(textEntered) || x.getVehicle().toLowerCase().contains(textEntered)).collect(Collectors.toList());
+        this.search = true;
         
-        this.searchedSales.clear();
-        this.searchedSales.addAll(searchedData);
-        this.constuctTableView();
+        this.cbFilters.forEach(x -> {
+            x.setSelected(true);
+        });
+        
+        String textEntered = this.txtSearchInput.getText().toLowerCase();
+        
+        this.searchedSales = new LinkedList<Sales>();
+        this.searchedSales = this.sales.stream().filter(x -> x.getRegion().toLowerCase().contains(textEntered) || x.getVehicle().toLowerCase().contains(textEntered)).collect(Collectors.toList());
+        
+        //this.saleTableData.clear();
+        //this.saleTableData.addAll(searchedData);
+        this.constructTableView();
     }
     
     public void resetButtonClicked()
     {
         this.txtSearchInput.clear();
-        this.searchedSales.clear();
-        this.searchedSales = FXCollections.observableArrayList(this.sales);
-        this.constuctTableView();
+        this.saleTableData.clear();
+        this.saleTableData = FXCollections.observableArrayList(this.sales);
+        this.constructTableView();
     }
 }

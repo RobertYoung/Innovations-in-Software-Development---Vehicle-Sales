@@ -116,7 +116,15 @@
             </Label>
           </children>
         </HBox>
-        <HBox prefHeight="61.0" prefWidth="513.0" />
+        <VBox fx:id="vBoxFilter" prefHeight="76.0" prefWidth="513.0">
+          <children>
+            <Label text="Filter">
+              <VBox.margin>
+                <Insets left="10.0" />
+              </VBox.margin>
+            </Label>
+          </children>
+        </VBox>
         <HBox alignment="CENTER_RIGHT" prefHeight="36.0" prefWidth="513.0">
           <children>
             <TextField fx:id="txtSearchInput" prefWidth="352.0" promptText="Enter a keyword" />
