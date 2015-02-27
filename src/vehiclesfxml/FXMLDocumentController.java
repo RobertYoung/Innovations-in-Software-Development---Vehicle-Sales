@@ -21,6 +21,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -28,6 +29,7 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -41,6 +43,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.VBoxBuilder;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 /**
  *
@@ -514,8 +520,9 @@ public class FXMLDocumentController implements Initializable {
     {
         if (this.txtSearchInput.getText().isEmpty())
         {
-            System.out.println("No text entered");
-            return;
+           this.displayPopup("Please enter a keyword");
+           
+           return;
         }
         
         this.search = true;
@@ -528,9 +535,7 @@ public class FXMLDocumentController implements Initializable {
         
         this.searchedSales = new LinkedList<Sales>();
         this.searchedSales = this.sales.stream().filter(x -> x.getRegion().toLowerCase().contains(textEntered) || x.getVehicle().toLowerCase().contains(textEntered)).collect(Collectors.toList());
-        
-        //this.saleTableData.clear();
-        //this.saleTableData.addAll(searchedData);
+
         this.constructTableView();
     }
     
@@ -540,5 +545,23 @@ public class FXMLDocumentController implements Initializable {
         this.saleTableData.clear();
         this.saleTableData = FXCollections.observableArrayList(this.sales);
         this.constructTableView();
+    }
+    
+    //************************//
+    // POPUP WINDOW FUNCTIONS //
+    //************************//
+    private void displayPopup(String description)
+    {
+        Stage dialogStage = new Stage();
+        Button btnOk = new Button("Ok");
+        Text txtDescription = new Text(description);
+
+        btnOk.setOnAction((event) -> {
+            dialogStage.close();
+        });
+
+        dialogStage.setScene(new Scene(VBoxBuilder.create().children(txtDescription, btnOk).alignment(Pos.CENTER).padding(new Insets(10)).build()));
+        dialogStage.initModality(Modality.APPLICATION_MODAL);
+        dialogStage.show();
     }
 }
