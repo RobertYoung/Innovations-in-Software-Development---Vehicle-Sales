@@ -17,18 +17,18 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -37,6 +37,8 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.print.Printer;
+import javafx.print.PrinterJob;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -49,6 +51,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -130,6 +133,10 @@ public class DashboardController implements Initializable {
     // Footer
     private GridPane gpTop3;
     private GridPane gpBreakdown;
+    public GridPane gpBreakdownOverall;
+    
+    // Dashboard variables
+    public VehiclesDashboard vehicleDashboard;
     
     // Checkboxes
     CheckBox[] yearCheckBoxes;
@@ -201,6 +208,30 @@ public class DashboardController implements Initializable {
         this.years = this.sales.stream().map(x -> x.getYear()).distinct().collect(Collectors.toList());
     }
     
+    private int getTotalVehicleSales()
+    {
+        return this.sales.stream().mapToInt(x -> x.getQuantity()).sum();
+    }
+    
+    private int getMinYear()
+    {
+       //List<Integer> minYear = this.sales.stream().map(x -> x.getYear()).distinct().collect(Collectors.toList());
+       
+       Collections.sort(this.years, (Integer o1, Integer o2) -> o1 - o2);
+       
+       return this.years.get(0);
+    }
+    
+    private int getMaxYear()
+    {
+        //List<Integer> minYear = this.sales.stream().map(x -> x.getYear()).distinct().collect(Collectors.toList());
+       
+        Collections.sort(this.years, (Integer o1, Integer o2) -> o1 - o2);
+       //Collections.sort(minYear, (Integer o1, Integer o2) -> o2 - o1);
+       
+       return this.years.get(this.years.size() - 1);
+    }
+    
     //***************************//
     // SETUP INTERFACE FUNCTIONS //
     //***************************//
@@ -218,6 +249,7 @@ public class DashboardController implements Initializable {
         this.setupLogo();
         this.setupTop3();
         this.setupBreakdown();
+        this.setupBreakdownOverall();
     }
     
     //***************************//
@@ -439,47 +471,51 @@ public class DashboardController implements Initializable {
     //*****************************//
     private void setupFilterTableData()
     {
-        this.cbFilters = new LinkedList<CheckBox>();
+        this.cbFilters = new LinkedList<>();
+        
+        GridPane gpFilters = new GridPane();
+        
+        gpFilters.setPadding(new Insets(2, 10, 2, 10));
+        this.vBoxFilter.getChildren().add(gpFilters);
         
         for (String property : this.saleProperties)
         {
             if (property.equals("Quantity"))
                 continue;
             
-            // Hbox for filters
-            HBox hBox = new HBox();
-            
-            hBox.setPadding(new Insets(2, 10, 2, 10));
+            int index = this.saleProperties.indexOf(property);
             
             // Add label
             Label label = new Label(property);
             label.setPadding(new Insets(2, 10, 2, 0));
-            hBox.getChildren().add(label);
+            
+            gpFilters.add(label, 0, index);
             
             // Get distinct data
             List<String> data = this.sales.stream().map(x -> x.getValueFromString(property)).distinct().collect(Collectors.toList());
             
-            List<CheckBox> filters = new LinkedList<CheckBox>();
+            List<CheckBox> filters = new LinkedList<>();
             
-            for (int i = 0; i < data.size(); i++)
-            {
-                String filter = data.get(i);
-                CheckBox cb = new CheckBox(filter);
+            data.stream().map((filter) -> new CheckBox(filter)).map((cb) -> {
                 cb.setSelected(true);
+                return cb;
+            }).map((cb) -> {
                 cb.setId(property);
+                return cb;
+            }).map((cb) -> {
                 cb.addEventFilter(ActionEvent.ACTION, (ActionEvent event) -> {
                     constructTableView();
                 });
-                
+                return cb;                
+            }).forEach((cb) -> {
                 filters.add(cb);
-            }
+            });
             
             this.cbFilters.addAll(filters);
-            
-            hBox.getChildren().addAll(filters);
-          
-            // Add to filter box
-            this.vBoxFilter.getChildren().add(hBox);
+
+            filters.stream().forEach((cBox) -> {
+                gpFilters.add(cBox, filters.indexOf(cBox) + 1, index);
+            });
         }
     }
     
@@ -619,7 +655,7 @@ public class DashboardController implements Initializable {
         
         btnOk.setPadding(new Insets(10, 10, 10, 10));
         btnOk.setOnAction((event) -> {
-             Platform.exit();
+             VehiclesDashboard.closeApplication();
         });
         
         hBoxCloseButtons.setAlignment(Pos.CENTER);
@@ -649,6 +685,44 @@ public class DashboardController implements Initializable {
         System.out.println("Refresh");
     }
     
+    public void logout()
+    {
+        this.vehicleDashboard.displayLogin();
+    }
+    
+    public void print()
+    {
+        Task task = new Task<Void>() {
+
+            @Override
+            protected Void call() throws Exception {
+                Printer printer = Printer.getDefaultPrinter();
+                PrinterJob job = PrinterJob.createPrinterJob(printer);
+
+                job.printPage(anchorPane);
+                
+                return null;
+            }
+
+        };
+        
+        ProgressIndicator progress = new ProgressIndicator();
+        
+        progress.progressProperty().bind(task.progressProperty());
+        progress.setLayoutX(this.scene.getWidth() / 2);
+        progress.setLayoutY(this.scene.getHeight() / 2);
+        
+        task.setOnScheduled((e) -> {
+            this.anchorPane.getChildren().add(progress);
+        });
+        
+        task.setOnSucceeded((e) -> {
+            this.anchorPane.getChildren().remove(progress);
+        });
+        
+        new Thread(task).start();
+    }
+
     //*********************//
     // DATE TIME FUNCTIONS //
     //*********************//
@@ -809,5 +883,18 @@ public class DashboardController implements Initializable {
         });
         
         return yearsSalesLast3;
+    }
+    
+    private void setupBreakdownOverall()
+    {
+        // Total vehicles sold
+        Label totalSold = new Label(Integer.toString(this.getTotalVehicleSales()));
+        this.gpBreakdownOverall.add(totalSold, 1, 0);
+        
+        // Years
+        int startYear = this.getMinYear();
+        int lastYear = this.getMaxYear();
+        
+        this.gpBreakdownOverall.add(new Label(startYear + " to " + lastYear), 1, 1);
     }
 }

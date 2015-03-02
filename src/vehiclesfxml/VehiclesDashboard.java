@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -30,7 +31,14 @@ public class VehiclesDashboard extends Application {
     private List<Sales> sales;
     
     // FXML variables
-    private DashboardController fxml;
+    private DashboardController dashboardFXML;
+    private LoginController loginFXML;
+    
+    // Statis constant variables
+    public static String WINDOW_TITLE = "| LOTUS | Vehicles Sales Dashboard |";
+    
+    // Stage variables
+    public Stage stage;
     
     /**
      * @param args the command line arguments
@@ -41,13 +49,15 @@ public class VehiclesDashboard extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        
+        this.stage = stage;
+        this.displayDashboard();
+        /*
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Login.fxml"));
             Parent root = fxmlLoader.load();            
-            Scene scene = new Scene(root, 1024, 768);
+            Scene scene = new Scene(root, 500, 300);
 
-            stage.setTitle("| LOTUS | Vehicles Sales Dashboard |");
+            stage.setTitle(VehiclesDashboard.WINDOW_TITLE);
             stage.setScene(scene);
             stage.show();
             
@@ -58,7 +68,7 @@ public class VehiclesDashboard extends Application {
             this.fxml.setupUserInterface();
         }catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
     
     //**********************//
@@ -74,5 +84,62 @@ public class VehiclesDashboard extends Application {
         {
             System.out.println(sale.toString());
         }
+    }
+    
+    //*****************//
+    // LOGIN FUNCTIONS //
+    //*****************//
+    public void displayLogin()
+    {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Login.fxml"));
+            Parent root = fxmlLoader.load();            
+            Scene scene = new Scene(root, 500, 300);
+
+            stage.setTitle(VehiclesDashboard.WINDOW_TITLE);
+            stage.setScene(scene);
+            stage.centerOnScreen();
+            stage.show();
+            
+            this.loginFXML = fxmlLoader.getController();
+            this.loginFXML.setScene(scene);
+            this.loginFXML.vehicleDashboard = this;
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    //*********************//
+    // DASHBOARD FUNCTIONS //
+    //*********************//
+    public void displayDashboard()
+    {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
+            Parent root = fxmlLoader.load();            
+            Scene scene = new Scene(root, 1024, 758);
+
+            stage.setTitle(VehiclesDashboard.WINDOW_TITLE);
+            stage.setScene(scene);
+            stage.centerOnScreen();
+            stage.show();
+            
+            this.dashboardFXML = fxmlLoader.getController();
+            this.dashboardFXML.setScene(scene);
+            this.getSalesData();
+            this.dashboardFXML.vehicleDashboard = this;
+            this.dashboardFXML.setSalesData(sales);
+            this.dashboardFXML.setupUserInterface();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    //***********************//
+    // APPLICATION FUNCTIONS //
+    //***********************//
+    public static void closeApplication()
+    {
+        Platform.exit();
     }
 }

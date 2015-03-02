@@ -48,18 +48,17 @@
         </HBox>
         <HBox alignment="BOTTOM_RIGHT" layoutX="14.0" layoutY="77.0" prefHeight="40.0" prefWidth="951.0">
           <children>
-            <Button mnemonicParsing="false" onAction="#refresh" text="Refresh">
-              <stylesheets>
-                <URL value="@Style.css" />
-              </stylesheets>
-            </Button>
+            <MenuButton alignment="CENTER_RIGHT" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" popupSide="BOTTOM" text="Options" underline="false">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#refresh" text="Refresh" />
+                <MenuItem mnemonicParsing="false" onAction="#print" text="Print" />
+                <MenuItem mnemonicParsing="false" onAction="#logout" text="Log Out" />
+                <MenuItem mnemonicParsing="false" onAction="#closeApplication" text="Exit" />
+              </items>
+            </MenuButton>
           </children>
         </HBox>
-        <ImageView fx:id="ivLogo" fitHeight="105.0" fitWidth="140.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-          <image>
-            <Image url="@../../assets/lotus.png" />
-          </image>
-        </ImageView>
+        <ImageView fx:id="ivLogo" fitHeight="105.0" fitWidth="140.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
       </children>
     </Pane>
     <Pane fx:id="paneCharts" layoutX="14.0" layoutY="188.0" prefHeight="461.0" prefWidth="461.0" style="-fx-border-color: #000;">
@@ -211,7 +210,7 @@
                   <children>
                     <Label id="gpBreakdown" prefWidth="211.0" text="Year" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                     <Label prefWidth="78.9998779296875" text="Sales" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                    <Label prefWidth="138.0" text="Percentage" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+                    <Label prefWidth="138.0" text="Participated" GridPane.columnIndex="4" GridPane.rowIndex="0" />
                     <Label text="Min" GridPane.columnIndex="2" GridPane.rowIndex="0" />
                     <Label text="Max" GridPane.columnIndex="3" GridPane.rowIndex="0" />
                   </children>
@@ -227,6 +226,21 @@
                   </rowConstraints>
                 </GridPane>
                 <Separator layoutX="489.0" layoutY="-7.0" orientation="VERTICAL" prefHeight="133.0" />
+                <GridPane id="gpBreakdown" fx:id="gpBreakdownOverall" layoutX="0.0" layoutY="5.0" prefHeight="52.0" prefWidth="271.0">
+                  <children>
+                    <Label text="Total vehicles sold:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <Label text="Years:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                  </children>
+                  <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="10.0" prefWidth="160.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="99.0" minWidth="10.0" prefWidth="40.0" />
+                  </columnConstraints>
+                  <rowConstraints>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  </rowConstraints>
+                </GridPane>
               </children>
             </AnchorPane>
           </content>
