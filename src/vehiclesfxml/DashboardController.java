@@ -6,12 +6,13 @@
 package vehiclesfxml;
 
 import java.io.IOException;
+import static java.lang.System.out;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.IntSummaryStatistics;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -27,7 +28,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -858,6 +858,10 @@ public class DashboardController implements Initializable {
             this.gpBreakdown.add(new Label(Integer.toString((int)statistics.getSum())), 1, i+1);
             this.gpBreakdown.add(new Label(Integer.toString(statistics.getMin())), 2, i+1);
             this.gpBreakdown.add(new Label(Integer.toString(statistics.getMax())), 3, i+1);
+            
+            DecimalFormat format = new DecimalFormat("####0.00");
+            
+            this.gpBreakdown.add(new Label(format.format((double)statistics.getSum() / (double)this.getTotalVehicleSales() * 100.00) + "%"), 4, i+1);
         }
     }
     
