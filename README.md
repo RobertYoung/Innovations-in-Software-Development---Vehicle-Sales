@@ -13,8 +13,8 @@ THINGS TO DO:
 - ~~Add logo~~
 - ~~Add refresh button~~
 - Animations?
-- Top 3 cars on footer
-- Top 3 regions on footer
+- ~~Top 3 cars on footer~~
+- ~~Top 3 regions on footer~~
 - Total Orders p/year on footer
-- Percentage split over the years
+- ~~Percentage split over the years~~
 - Create a CSS file and apply styles to all elements
