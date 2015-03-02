@@ -7,6 +7,7 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
@@ -30,7 +31,7 @@
         <URL value="@Style.css" />
       </stylesheets>
     </MenuBar>
-    <Pane layoutX="14.0" layoutY="39.0" prefHeight="133.0" prefWidth="986.0" style="-fx-border-color: #000;&#10;">
+    <Pane layoutX="14.0" layoutY="39.0" prefHeight="112.0" prefWidth="986.0" style="-fx-border-color: #000;&#10;">
       <children>
         <HBox fx:id="topHBox" alignment="TOP_LEFT" layoutX="221.0" layoutY="14.0" minHeight="36.0" prefHeight="36.0" prefWidth="754.0" style="&#10;">
           <children>
@@ -46,7 +47,7 @@
             </Label>
           </children>
         </HBox>
-        <HBox alignment="BOTTOM_RIGHT" layoutX="14.0" layoutY="77.0" prefHeight="40.0" prefWidth="951.0">
+        <HBox alignment="BOTTOM_RIGHT" layoutX="26.0" layoutY="58.0" prefHeight="40.0" prefWidth="951.0">
           <children>
             <MenuButton alignment="CENTER_RIGHT" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" popupSide="BOTTOM" text="Options" underline="false">
               <items>
@@ -58,10 +59,24 @@
             </MenuButton>
           </children>
         </HBox>
-        <ImageView fx:id="ivLogo" fitHeight="105.0" fitWidth="140.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+        <ImageView fx:id="ivLogo" fitHeight="87.5" fitWidth="116.66666666666666" layoutX="14.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+          <effect>
+            <Lighting diffuseConstant="1.380952380952381" specularConstant="0.6349206349206349" specularExponent="18.73015873015873" surfaceScale="4.833333333333333">
+              <bumpInput>
+                <Shadow />
+              </bumpInput>
+              <light>
+                <javafx.scene.effect.Light.Distant />
+              </light>
+            </Lighting>
+          </effect>
+          <image>
+            <Image url="@lotus.png" />
+          </image>
+        </ImageView>
       </children>
     </Pane>
-    <Pane fx:id="paneCharts" layoutX="14.0" layoutY="188.0" prefHeight="461.0" prefWidth="461.0" style="-fx-border-color: #000;">
+    <Pane fx:id="paneCharts" layoutX="14.0" layoutY="166.0" prefHeight="461.0" prefWidth="461.0" style="-fx-border-color: #000;">
       <children>
         <VBox fx:id="vBoxLeft" prefHeight="76.0" prefWidth="461.0">
           <children>
@@ -130,7 +145,7 @@
         </Pane>
       </children>
     </Pane>
-    <VBox fx:id="vBoxViewData" layoutX="485.0" layoutY="187.0" prefHeight="461.0" prefWidth="515.0" style="-fx-border-color: #000;">
+    <VBox fx:id="vBoxViewData" layoutX="485.0" layoutY="166.0" prefHeight="461.0" prefWidth="515.0" style="-fx-border-color: #000;">
       <children>
         <HBox alignment="TOP_CENTER" prefHeight="21.0" prefWidth="513.0">
           <children>
@@ -175,7 +190,7 @@
         </TableView>
       </children>
     </VBox>
-    <TabPane layoutX="14.0" layoutY="666.0" prefHeight="88.0" prefWidth="986.0" tabClosingPolicy="UNAVAILABLE">
+    <TabPane layoutX="14.0" layoutY="653.0" prefHeight="101.0" prefWidth="986.0" tabClosingPolicy="UNAVAILABLE">
       <tabs>
         <Tab text="Top 3">
           <content>
@@ -206,7 +221,7 @@
           <content>
             <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="66.0" prefWidth="986.0">
               <children>
-                <GridPane fx:id="gpBreakdown" layoutX="500.0" layoutY="0.0" maxHeight="90.0" prefWidth="483.0">
+                <GridPane fx:id="gpBreakdown" layoutX="500.0" layoutY="10.0" maxHeight="90.0" prefWidth="483.0">
                   <children>
                     <Label id="gpBreakdown" prefWidth="211.0" text="Year" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                     <Label prefWidth="78.9998779296875" text="Sales" GridPane.columnIndex="1" GridPane.rowIndex="0" />

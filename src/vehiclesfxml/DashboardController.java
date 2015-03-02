@@ -5,9 +5,11 @@
  */
 package vehiclesfxml;
 
+import java.awt.Desktop;
 import java.io.IOException;
-import static java.lang.System.out;
 import java.lang.reflect.Method;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -19,9 +21,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -336,23 +342,18 @@ public class DashboardController implements Initializable {
             PieChart.Data qtr = pieData.get(i);
             Label caption = new Label("");
             
-            qtr.getNode().addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>(){
-
-                @Override
-                public void handle(MouseEvent e) {
+            qtr.getNode().addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+                Bounds bounds = qtr.getNode().getBoundsInParent();
                 
-                    Bounds bounds = qtr.getNode().getBoundsInParent();
-                    
-                    caption.setTranslateX(bounds.getMaxX() - 70);
-                    caption.setTranslateY(bounds.getMaxY() + 180);
-                    caption.setText(String.valueOf(((int)qtr.getPieValue())));
-                    ObservableList<Node> children = getChildren();
-                    
-                    if (children.indexOf(caption) == -1)
-                         getChildren().add(caption);
-                    else{
-                        caption.visibleProperty().set(true);
-                    }
+                caption.setTranslateX(bounds.getMaxX() - 70);
+                caption.setTranslateY(bounds.getMaxY() + 180);
+                caption.setText(String.valueOf(((int)qtr.getPieValue())));
+                ObservableList<Node> children = getChildren();
+                
+                if (children.indexOf(caption) == -1)
+                    getChildren().add(caption);
+                else{
+                    caption.visibleProperty().set(true);
                 }
             });
             
@@ -747,6 +748,21 @@ public class DashboardController implements Initializable {
         Image logo = new Image(getClass().getResource("lotus.png").toExternalForm());
         
         this.ivLogo.setImage(logo);
+        this.ivLogo.setCursor(Cursor.HAND);
+        this.ivLogo.setOnMouseClicked((MouseEvent e) -> {
+            try {
+                Desktop.getDesktop().browse(new URI("http://www.lotuscars.com/"));
+            } catch (IOException | URISyntaxException ex) {
+                Logger.getLogger(DashboardController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+       
+        this.ivLogo.translateXProperty().set(this.ivLogo.translateXProperty().get() - 400);
+        
+        Timeline timeline = new Timeline();
+        
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(2000), new KeyValue(this.ivLogo.translateXProperty(), this.ivLogo.translateXProperty().get() + 400)));
+        timeline.play();
     }
 
     //******************//
