@@ -176,26 +176,62 @@
         </TableView>
       </children>
     </VBox>
-    <Pane layoutX="13.0" layoutY="666.0" prefHeight="88.0" prefWidth="986.0" style="-fx-border-color: #000;&#10;">
-      <children>
-        <GridPane fx:id="gpTop3" alignment="CENTER" gridLinesVisible="false" layoutX="0.0" layoutY="31.0" prefHeight="58.999900000002526" prefWidth="472.999977929685">
-          <children>
-            <Label text="Vehicles" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-            <Label text="Regions" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-          </children>
-          <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="492.0" minWidth="10.0" prefWidth="74.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="905.0" minWidth="10.0" prefWidth="127.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="905.0" minWidth="10.0" prefWidth="134.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="905.0" minWidth="10.0" prefWidth="137.0" />
-          </columnConstraints>
-          <rowConstraints>
-            <RowConstraints maxHeight="29.0" minHeight="10.0" prefHeight="19.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="29.0" minHeight="10.0" prefHeight="19.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="21.0" vgrow="SOMETIMES" />
-          </rowConstraints>
-        </GridPane>
-      </children>
-    </Pane>
+    <TabPane layoutX="14.0" layoutY="666.0" prefHeight="88.0" prefWidth="986.0" tabClosingPolicy="UNAVAILABLE">
+      <tabs>
+        <Tab text="Top 3">
+          <content>
+            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <children>
+                <GridPane fx:id="gpTop3" alignment="CENTER" gridLinesVisible="false" layoutX="0.0" layoutY="0.0" prefHeight="59.0" prefWidth="742.0">
+                  <children>
+                    <Label alignment="CENTER" contentDisplay="CENTER" prefWidth="70.0" text="Vehicles" textAlignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <Label alignment="CENTER" prefWidth="70.0" text="Regions" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                  </children>
+                  <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="492.0" minWidth="10.0" prefWidth="74.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="905.0" minWidth="10.0" prefWidth="127.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="905.0" minWidth="10.0" prefWidth="134.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="905.0" minWidth="10.0" prefWidth="137.0" />
+                  </columnConstraints>
+                  <rowConstraints>
+                    <RowConstraints maxHeight="29.0" minHeight="10.0" prefHeight="19.0" vgrow="SOMETIMES" />
+                    <RowConstraints maxHeight="29.0" minHeight="10.0" prefHeight="19.0" vgrow="SOMETIMES" />
+                    <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="21.0" vgrow="SOMETIMES" />
+                  </rowConstraints>
+                </GridPane>
+              </children>
+            </AnchorPane>
+          </content>
+        </Tab>
+        <Tab text="Breakdown">
+          <content>
+            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="66.0" prefWidth="986.0">
+              <children>
+                <GridPane fx:id="gpBreakdown" layoutX="500.0" layoutY="0.0" maxHeight="90.0" prefWidth="483.0">
+                  <children>
+                    <Label id="gpBreakdown" prefWidth="211.0" text="Year" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <Label prefWidth="78.9998779296875" text="Sales" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                    <Label prefWidth="138.0" text="Percentage" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+                    <Label text="Min" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                    <Label text="Max" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                  </children>
+                  <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="10.0" prefWidth="86.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="149.0" minWidth="10.0" prefWidth="84.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="166.0" minWidth="10.0" prefWidth="90.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="166.0" minWidth="10.0" prefWidth="90.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="166.0" minWidth="10.0" prefWidth="90.0" />
+                  </columnConstraints>
+                  <rowConstraints>
+                    <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                  </rowConstraints>
+                </GridPane>
+                <Separator layoutX="489.0" layoutY="-7.0" orientation="VERTICAL" prefHeight="133.0" />
+              </children>
+            </AnchorPane>
+          </content>
+        </Tab>
+      </tabs>
+    </TabPane>
   </children>
 </AnchorPane>

@@ -12,7 +12,6 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.IntSummaryStatistics;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -130,6 +129,7 @@ public class DashboardController implements Initializable {
     
     // Footer
     private GridPane gpTop3;
+    private GridPane gpBreakdown;
     
     // Checkboxes
     CheckBox[] yearCheckBoxes;
@@ -176,6 +176,7 @@ public class DashboardController implements Initializable {
         
         // Footer
         this.gpTop3 = (GridPane)this.anchorPane.lookup("#gpTop3");
+        this.gpBreakdown = (GridPane)this.anchorPane.lookup("#gpBreakdown");
     }    
     
     //*****************//
@@ -216,6 +217,7 @@ public class DashboardController implements Initializable {
         this.setupDateTimeLabel();
         this.setupLogo();
         this.setupTop3();
+        this.setupBreakdown();
     }
     
     //***************************//
@@ -727,26 +729,19 @@ public class DashboardController implements Initializable {
         Map<String, List<Sales>> vehicles =  this.sales.stream().collect(Collectors.groupingBy(x -> x.getVehicle()));
         List<LinkedHashMap<String, IntSummaryStatistics>> vehicleTop3 = new LinkedList<>();
         
-        for (Entry<String, List<Sales>> vehicle : vehicles.entrySet())
-        {
+        vehicles.entrySet().stream().map((vehicle) -> {
             LinkedHashMap<String, IntSummaryStatistics> map = new LinkedHashMap();
-            
             map.put(vehicle.getKey(), vehicle.getValue().stream().collect(Collectors.summarizingInt(x -> x.getQuantity())));
-            
+            return map;            
+        }).forEach((map) -> {
             vehicleTop3.add(map);
-        }
+        });
         
-        Collections.sort(vehicleTop3, new Comparator<LinkedHashMap<String, IntSummaryStatistics>>()
-        {
-
-            @Override
-            public int compare(LinkedHashMap<String, IntSummaryStatistics> o1, LinkedHashMap<String, IntSummaryStatistics> o2) {
-                IntSummaryStatistics o1Summary = o1.entrySet().stream().findFirst().get().getValue();
-                IntSummaryStatistics o2Summary = o2.entrySet().stream().findFirst().get().getValue();
-                
-                return (int)o2Summary.getSum() - (int)o1Summary.getSum();
-            }
+        Collections.sort(vehicleTop3, (LinkedHashMap<String, IntSummaryStatistics> o1, LinkedHashMap<String, IntSummaryStatistics> o2) -> {
+            IntSummaryStatistics o1Summary = o1.entrySet().stream().findFirst().get().getValue();
+            IntSummaryStatistics o2Summary = o2.entrySet().stream().findFirst().get().getValue();
             
+            return (int)o2Summary.getSum() - (int)o1Summary.getSum();
         });
         
         return vehicleTop3;
@@ -758,28 +753,61 @@ public class DashboardController implements Initializable {
         Map<String, List<Sales>> regions =  this.sales.stream().collect(Collectors.groupingBy(x -> x.getRegion()));
         List<LinkedHashMap<String, IntSummaryStatistics>> regionTop3 = new LinkedList<>();
         
-        for (Entry<String, List<Sales>> vehicle : regions.entrySet())
-        {
+        regions.entrySet().stream().map((vehicle) -> {
             LinkedHashMap<String, IntSummaryStatistics> map = new LinkedHashMap();
-            
             map.put(vehicle.getKey(), vehicle.getValue().stream().collect(Collectors.summarizingInt(x -> x.getQuantity())));
-            
+            return map;            
+        }).forEach((map) -> {
             regionTop3.add(map);
-        }
+        });
         
-        Collections.sort(regionTop3, new Comparator<LinkedHashMap<String, IntSummaryStatistics>>()
-        {
-
-            @Override
-            public int compare(LinkedHashMap<String, IntSummaryStatistics> o1, LinkedHashMap<String, IntSummaryStatistics> o2) {
-                IntSummaryStatistics o1Summary = o1.entrySet().stream().findFirst().get().getValue();
-                IntSummaryStatistics o2Summary = o2.entrySet().stream().findFirst().get().getValue();
-                
-                return (int)o2Summary.getSum() - (int)o1Summary.getSum();
-            }
+        Collections.sort(regionTop3, (LinkedHashMap<String, IntSummaryStatistics> o1, LinkedHashMap<String, IntSummaryStatistics> o2) -> {
+            IntSummaryStatistics o1Summary = o1.entrySet().stream().findFirst().get().getValue();
+            IntSummaryStatistics o2Summary = o2.entrySet().stream().findFirst().get().getValue();
             
+            return (int)o2Summary.getSum() - (int)o1Summary.getSum();
         });
         
         return regionTop3;
+    }
+
+    private void setupBreakdown() {
+        List<LinkedHashMap<Integer, IntSummaryStatistics>> yearsBreakdown = this.calculateLast3Years();
+        
+        for (int i = 0; i < 3; i++)
+        {
+            // Vehicle top 3
+            Integer year = yearsBreakdown.get(i).entrySet().stream().findFirst().get().getKey();
+            IntSummaryStatistics statistics = yearsBreakdown.get(i).entrySet().stream().findFirst().get().getValue();
+            
+            this.gpBreakdown.add(new Label(year.toString()), 0, i + 1);
+            this.gpBreakdown.add(new Label(Integer.toString((int)statistics.getSum())), 1, i+1);
+            this.gpBreakdown.add(new Label(Integer.toString(statistics.getMin())), 2, i+1);
+            this.gpBreakdown.add(new Label(Integer.toString(statistics.getMax())), 3, i+1);
+        }
+    }
+    
+    private List<LinkedHashMap<Integer, IntSummaryStatistics>> calculateLast3Years()
+    {
+         // Top vehicles
+        Map<Integer, List<Sales>> yearsSales =  this.sales.stream().collect(Collectors.groupingBy(x -> x.getYear()));
+        List<LinkedHashMap<Integer, IntSummaryStatistics>> yearsSalesLast3 = new LinkedList<>();
+        
+        yearsSales.entrySet().stream().map((vehicle) -> {
+            LinkedHashMap<Integer, IntSummaryStatistics> map = new LinkedHashMap();
+            map.put(vehicle.getKey(), vehicle.getValue().stream().collect(Collectors.summarizingInt(x -> x.getQuantity())));
+            return map;            
+        }).forEach((map) -> {
+            yearsSalesLast3.add(map);
+        });
+        
+        Collections.sort(yearsSalesLast3, (LinkedHashMap<Integer, IntSummaryStatistics> o1, LinkedHashMap<Integer, IntSummaryStatistics> o2) -> {
+            Integer year1 = o1.keySet().stream().findFirst().get();
+            Integer year2 = o2.keySet().stream().findFirst().get();
+            
+            return year1 - year2;
+        });
+        
+        return yearsSalesLast3;
     }
 }
