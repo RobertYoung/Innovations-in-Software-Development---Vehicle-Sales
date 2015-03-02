@@ -10,8 +10,15 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.IntSummaryStatistics;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import javafx.animation.Animation;
@@ -52,6 +59,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -120,6 +128,9 @@ public class DashboardController implements Initializable {
     private Button btnReset;
     private Button btnSearch;
     
+    // Footer
+    private GridPane gpTop3;
+    
     // Checkboxes
     CheckBox[] yearCheckBoxes;
     
@@ -162,6 +173,9 @@ public class DashboardController implements Initializable {
         // Top nav bar
         this.lblDateTime = (Label)this.anchorPane.lookup("#lblDateTime");
         this.ivLogo = (ImageView)this.anchorPane.lookup("#ivLogo");
+        
+        // Footer
+        this.gpTop3 = (GridPane)this.anchorPane.lookup("#gpTop3");
     }    
     
     //*****************//
@@ -201,6 +215,7 @@ public class DashboardController implements Initializable {
         this.setupFilterTableData();
         this.setupDateTimeLabel();
         this.setupLogo();
+        this.setupTop3();
     }
     
     //***************************//
@@ -656,5 +671,115 @@ public class DashboardController implements Initializable {
         Image logo = new Image(getClass().getResource("lotus.png").toExternalForm());
         
         this.ivLogo.setImage(logo);
+    }
+
+    //******************//
+    // FOOTER FUNCTIONS //
+    //******************//
+    private void setupTop3() {
+        List<LinkedHashMap<String, IntSummaryStatistics>> vehicleTop3 = this.calculateTop3Vehicles();
+        List<LinkedHashMap<String, IntSummaryStatistics>> regionTop3 = this.calculateTop3Regions();
+        
+        for (int i = 0; i < 3; i++)
+        {
+            String imageFile = "medal";
+            
+            if (i == 0)
+            {
+                imageFile = "trophy";
+            }
+            
+            // Vehicle top 3
+            String vehicle = vehicleTop3.get(i).entrySet().stream().findFirst().get().getKey();
+            IntSummaryStatistics statistics = vehicleTop3.get(i).entrySet().stream().findFirst().get().getValue();
+            Label label = new Label(vehicle + " (" + statistics.getSum() + ")");
+            Image trophy = new Image(getClass().getResource(imageFile + ".png").toExternalForm());
+            ImageView ivTrophy = new ImageView(trophy);
+
+            ivTrophy.setFitHeight(20);
+            ivTrophy.setFitWidth(20);
+
+            label.setPadding(new Insets(0, 0, 0, 30));
+            
+            this.gpTop3.add(ivTrophy, i + 1, 0);
+            this.gpTop3.add(label, i + 1, 0);
+            
+            // Vehicle top 3
+            String region = regionTop3.get(i).entrySet().stream().findFirst().get().getKey();
+            IntSummaryStatistics regionStatistics = regionTop3.get(i).entrySet().stream().findFirst().get().getValue();
+            Label labelRegion = new Label(region + " (" + regionStatistics.getSum() + ")");
+            Image trophyRegion = new Image(getClass().getResource(imageFile + ".png").toExternalForm());
+            ImageView ivTrophyRegion = new ImageView(trophyRegion);
+            
+            ivTrophyRegion.setFitHeight(20);
+            ivTrophyRegion.setFitWidth(20);
+
+            labelRegion.setPadding(new Insets(0, 0, 0, 30));
+            
+            this.gpTop3.add(ivTrophyRegion, i + 1, 1);
+            this.gpTop3.add(labelRegion, i + 1, 1);
+        }
+    }
+    
+    private List<LinkedHashMap<String, IntSummaryStatistics>> calculateTop3Vehicles()
+    {
+        // Top vehicles
+        Map<String, List<Sales>> vehicles =  this.sales.stream().collect(Collectors.groupingBy(x -> x.getVehicle()));
+        List<LinkedHashMap<String, IntSummaryStatistics>> vehicleTop3 = new LinkedList<>();
+        
+        for (Entry<String, List<Sales>> vehicle : vehicles.entrySet())
+        {
+            LinkedHashMap<String, IntSummaryStatistics> map = new LinkedHashMap();
+            
+            map.put(vehicle.getKey(), vehicle.getValue().stream().collect(Collectors.summarizingInt(x -> x.getQuantity())));
+            
+            vehicleTop3.add(map);
+        }
+        
+        Collections.sort(vehicleTop3, new Comparator<LinkedHashMap<String, IntSummaryStatistics>>()
+        {
+
+            @Override
+            public int compare(LinkedHashMap<String, IntSummaryStatistics> o1, LinkedHashMap<String, IntSummaryStatistics> o2) {
+                IntSummaryStatistics o1Summary = o1.entrySet().stream().findFirst().get().getValue();
+                IntSummaryStatistics o2Summary = o2.entrySet().stream().findFirst().get().getValue();
+                
+                return (int)o2Summary.getSum() - (int)o1Summary.getSum();
+            }
+            
+        });
+        
+        return vehicleTop3;
+    }
+    
+    private List<LinkedHashMap<String, IntSummaryStatistics>> calculateTop3Regions()
+    {
+        // Top vehicles
+        Map<String, List<Sales>> regions =  this.sales.stream().collect(Collectors.groupingBy(x -> x.getRegion()));
+        List<LinkedHashMap<String, IntSummaryStatistics>> regionTop3 = new LinkedList<>();
+        
+        for (Entry<String, List<Sales>> vehicle : regions.entrySet())
+        {
+            LinkedHashMap<String, IntSummaryStatistics> map = new LinkedHashMap();
+            
+            map.put(vehicle.getKey(), vehicle.getValue().stream().collect(Collectors.summarizingInt(x -> x.getQuantity())));
+            
+            regionTop3.add(map);
+        }
+        
+        Collections.sort(regionTop3, new Comparator<LinkedHashMap<String, IntSummaryStatistics>>()
+        {
+
+            @Override
+            public int compare(LinkedHashMap<String, IntSummaryStatistics> o1, LinkedHashMap<String, IntSummaryStatistics> o2) {
+                IntSummaryStatistics o1Summary = o1.entrySet().stream().findFirst().get().getValue();
+                IntSummaryStatistics o2Summary = o2.entrySet().stream().findFirst().get().getValue();
+                
+                return (int)o2Summary.getSum() - (int)o1Summary.getSum();
+            }
+            
+        });
+        
+        return regionTop3;
     }
 }

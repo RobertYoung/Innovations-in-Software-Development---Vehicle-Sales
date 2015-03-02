@@ -176,6 +176,26 @@
         </TableView>
       </children>
     </VBox>
-    <Pane layoutX="13.0" layoutY="666.0" prefHeight="88.0" prefWidth="986.0" style="-fx-border-color: #000;&#10;" />
+    <Pane layoutX="13.0" layoutY="666.0" prefHeight="88.0" prefWidth="986.0" style="-fx-border-color: #000;&#10;">
+      <children>
+        <GridPane fx:id="gpTop3" alignment="CENTER" gridLinesVisible="false" layoutX="0.0" layoutY="31.0" prefHeight="58.999900000002526" prefWidth="472.999977929685">
+          <children>
+            <Label text="Vehicles" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <Label text="Regions" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+          </children>
+          <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="492.0" minWidth="10.0" prefWidth="74.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="905.0" minWidth="10.0" prefWidth="127.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="905.0" minWidth="10.0" prefWidth="134.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="905.0" minWidth="10.0" prefWidth="137.0" />
+          </columnConstraints>
+          <rowConstraints>
+            <RowConstraints maxHeight="29.0" minHeight="10.0" prefHeight="19.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="29.0" minHeight="10.0" prefHeight="19.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="21.0" vgrow="SOMETIMES" />
+          </rowConstraints>
+        </GridPane>
+      </children>
+    </Pane>
   </children>
 </AnchorPane>
