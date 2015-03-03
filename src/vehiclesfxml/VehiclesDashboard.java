@@ -35,7 +35,7 @@ public class VehiclesDashboard extends Application {
     private LoginController loginFXML;
     
     // Statis constant variables
-    public static String WINDOW_TITLE = "| LOTUS | Vehicles Sales Dashboard |";
+    public static String WINDOW_TITLE = "| LOTUS | ";
     
     // Stage variables
     public Stage stage;
@@ -53,9 +53,10 @@ public class VehiclesDashboard extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         this.stage = stage;
-        this.setLotusStyle();
         
         this.displayDashboard();
+        this.setLotusStyle();
+        
         /*
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Login.fxml"));
@@ -101,7 +102,7 @@ public class VehiclesDashboard extends Application {
             Parent root = fxmlLoader.load();            
             Scene scene = new Scene(root, 500, 300);
 
-            stage.setTitle(VehiclesDashboard.WINDOW_TITLE);
+            stage.setTitle(VehiclesDashboard.WINDOW_TITLE + "Login");
             stage.setScene(scene);
             stage.centerOnScreen();
             stage.show();
@@ -124,7 +125,7 @@ public class VehiclesDashboard extends Application {
             Parent root = fxmlLoader.load();            
             Scene scene = new Scene(root, 1024, 758);
 
-            stage.setTitle(VehiclesDashboard.WINDOW_TITLE);
+            stage.setTitle(VehiclesDashboard.WINDOW_TITLE + "Vehicle Sales Dashboard");
             stage.setScene(scene);
             stage.centerOnScreen();
             stage.show();
@@ -154,10 +155,17 @@ public class VehiclesDashboard extends Application {
     public void setLotusStyle()
     {
         this.currentStyle = "Lotus";
+        this.setStyle();
     }
     
     public void setContrastStyle()
     {
         this.currentStyle = "Contrast";
+        this.setStyle();
+    }
+    
+    public void setStyle()
+    {
+        this.dashboardFXML.setStyle("css/" + this.currentStyle + ".css");
     }
 }

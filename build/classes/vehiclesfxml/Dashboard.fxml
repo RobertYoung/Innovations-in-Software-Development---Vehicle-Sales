@@ -28,9 +28,6 @@
           </items>
         </Menu>
       </menus>
-      <stylesheets>
-        <URL value="@Style.css" />
-      </stylesheets>
     </MenuBar>
     <Pane fx:id="paneNavBar" layoutX="14.0" layoutY="39.0" prefHeight="112.0" prefWidth="986.0" style="-fx-border-color: #000;&#10;">
       <children>
@@ -54,6 +51,7 @@
               <items>
                 <MenuItem mnemonicParsing="false" onAction="#refresh" text="Refresh" />
                 <MenuItem mnemonicParsing="false" onAction="#print" text="Print" />
+                        <MenuItem mnemonicParsing="false" onAction="#displaySettings" text="Settings" />
                 <MenuItem mnemonicParsing="false" onAction="#logout" text="Log Out" />
                 <MenuItem mnemonicParsing="false" onAction="#closeApplication" text="Exit" />
               </items>

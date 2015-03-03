@@ -7,6 +7,8 @@ package vehiclesfxml;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -68,5 +70,16 @@ public class SettingsController implements Initializable {
         
         this.cbStyle.getItems().addAll(options);
         this.cbStyle.setValue(vehicleDashboard.currentStyle + " Theme");
+        this.cbStyle.valueProperty().addListener(new ChangeListener<String>(){
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (newValue.startsWith("Lotus"))
+                    vehicleDashboard.setLotusStyle();
+                else if (newValue.startsWith("Contrast"))
+                    vehicleDashboard.setContrastStyle();
+            }
+            
+        });
     }
 }

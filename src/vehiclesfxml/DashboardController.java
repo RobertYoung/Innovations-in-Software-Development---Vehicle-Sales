@@ -298,25 +298,6 @@ public class DashboardController implements Initializable {
                 tpFooterTransition);
         
         sequentialTransition.play();
-
-        /*
-        // Nav bar
-        Timeline paneNavBarTimeline = new Timeline();
-        
-        this.paneNavBar.setTranslateY(this.paneNavBar.getTranslateX() - 400);
-        
-        paneNavBarTimeline.getKeyFrames().add(new KeyFrame(Duration.millis(500), new KeyValue(this.paneNavBar.translateYProperty(), this.paneNavBar.translateYProperty().get() + 400)));
-        
-        
-        // Charts
-        Timeline paneChartsTimeline = new Timeline();
-        
-        this.paneCharts.setTranslateX(this.paneCharts.getTranslateY() - 400);
-        
-        paneChartsTimeline.getKeyFrames().add(new KeyFrame(Duration.millis(500), new KeyValue(this.paneCharts.translateXProperty(), this.paneCharts.translateXProperty().get() + 400)));
-                
-        paneNavBarTimeline.play();
-        */
     }
     
     //***************************//
@@ -738,6 +719,7 @@ public class DashboardController implements Initializable {
         Scene aboutScene = new Scene(aboutRoot, 500, 200);
         AboutController aboutController = aboutLoader.getController();
         
+        aboutStage.setTitle(VehiclesDashboard.WINDOW_TITLE + "About");
         aboutStage.setScene(aboutScene);
         aboutStage.show();
         aboutController.setScene(aboutScene);
@@ -748,9 +730,10 @@ public class DashboardController implements Initializable {
         Stage settingsStage = new Stage();
         FXMLLoader settingsLoader = new FXMLLoader(getClass().getResource("Settings.fxml"));
         Parent settingsRoot = settingsLoader.load();
-        Scene settingsScene = new Scene(settingsRoot, 500, 200);
+        Scene settingsScene = new Scene(settingsRoot, 400, 250);
         SettingsController settingsController = settingsLoader.getController();
         
+        settingsStage.setTitle(VehiclesDashboard.WINDOW_TITLE + "Settings");
         settingsController.vehicleDashboard = this.vehicleDashboard;
         settingsStage.setScene(settingsScene);
         settingsStage.show();
@@ -993,5 +976,14 @@ public class DashboardController implements Initializable {
         int lastYear = this.getMaxYear();
         
         this.gpBreakdownOverall.add(new Label(startYear + " to " + lastYear), 1, 1);
+    }
+    
+    //*****************//
+    // STYLE FUNCTIONS //
+    //*****************//
+    public void setStyle(String style)
+    {
+        this.scene.getStylesheets().clear();
+        this.scene.getStylesheets().add(style);
     }
 }
