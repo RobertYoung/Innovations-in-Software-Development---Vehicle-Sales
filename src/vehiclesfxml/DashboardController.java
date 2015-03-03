@@ -467,9 +467,9 @@ public class DashboardController implements Initializable {
         this.pieChart.visibleProperty().bind(this.rbPieChart.selectedProperty());
         this.barChart.visibleProperty().bind(this.rbBarChart.selectedProperty());
         this.lineChart.visibleProperty().bind(this.rbLineChart.selectedProperty());
-        this.pieChart.disableProperty().bind(this.rbPieChart.selectedProperty().not());
-        this.barChart.disableProperty().bind(this.rbBarChart.selectedProperty().not());
-        this.lineChart.disableProperty().bind(this.rbLineChart.selectedProperty().not());
+        this.panePieChart.disableProperty().bind(this.rbPieChart.selectedProperty().not());
+        this.paneBarChart.disableProperty().bind(this.rbBarChart.selectedProperty().not());
+        this.paneLineChart.disableProperty().bind(this.rbLineChart.selectedProperty().not());
     }
     
     //*****************************//

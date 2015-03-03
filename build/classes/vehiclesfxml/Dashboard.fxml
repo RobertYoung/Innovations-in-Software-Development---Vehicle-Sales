@@ -131,6 +131,9 @@
               <yAxis>
                 <NumberAxis side="LEFT" />
               </yAxis>
+                     <cursor>
+                        <Cursor fx:constant="CROSSHAIR" />
+                     </cursor>
             </BarChart>
           </children>
         </Pane>
