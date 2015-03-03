@@ -39,7 +39,6 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -48,7 +47,6 @@ import javafx.print.Printer;
 import javafx.print.PrinterJob;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
@@ -557,6 +555,8 @@ public class DashboardController implements Initializable {
             // Add label
             Label label = new Label(property);
             label.setPadding(new Insets(2, 10, 2, 0));
+            label.setAlignment(Pos.BOTTOM_LEFT);
+            label.getStyleClass().add("moduleTextBold");
             
             gpFilters.add(label, 0, index);
             

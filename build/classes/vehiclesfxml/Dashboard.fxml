@@ -150,7 +150,7 @@
       <children>
         <HBox alignment="TOP_CENTER" prefHeight="21.0" prefWidth="513.0">
           <children>
-            <Label text="View Data">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefWidth="403.0" text="View Data" textAlignment="CENTER">
               <font>
                 <Font size="14.0" />
               </font>
@@ -159,7 +159,7 @@
         </HBox>
         <VBox fx:id="vBoxFilter" prefHeight="76.0" prefWidth="513.0">
           <children>
-            <Label text="Filter">
+            <Label text="Filters">
               <VBox.margin>
                 <Insets left="10.0" />
               </VBox.margin>
