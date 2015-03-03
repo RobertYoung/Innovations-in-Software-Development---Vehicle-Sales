@@ -27,7 +27,9 @@ import java.util.stream.Collectors;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
+import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
@@ -88,6 +90,7 @@ public class DashboardController implements Initializable {
     private AnchorPane anchorPane;
     
     // Layouts
+    private Pane paneNavBar;
     private VBox vBoxLeft;
     private HBox hBoxYearCheckboxes;
     private HBox hBoxChartSelection;
@@ -103,7 +106,7 @@ public class DashboardController implements Initializable {
     private RadioButton rbLineChart;
     private RadioButton rbBarChart;
     
-    // Pane charts
+    // Pane charts    
     private Pane panePieChart;
     private Pane paneBarChart;
     private Pane paneLineChart;
@@ -153,6 +156,7 @@ public class DashboardController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Layout
+        this.paneNavBar = (Pane)this.anchorPane.lookup("#paneNavBar");
         this.paneCharts = (Pane)this.anchorPane.lookup("#paneCharts");
         this.vBoxLeft = (VBox)this.paneCharts.lookup("#vBoxLeft");
         this.hBoxYearCheckboxes = (HBox)this.vBoxLeft.lookup("#hBoxYearCheckboxes");
@@ -260,6 +264,40 @@ public class DashboardController implements Initializable {
         this.setupTop3();
         this.setupBreakdown();
         this.setupBreakdownOverall();
+        this.setupInterfaceAnimations();
+    }
+    
+    public void setupInterfaceAnimations()
+    {       
+        TranslateTransition paneNavBarTransition = new TranslateTransition(Duration.millis(500), this.paneNavBar);
+        
+        paneNavBarTransition.setFromY(this.paneNavBar.getTranslateY() - 400);
+        paneNavBarTransition.setToY(this.paneNavBar.getTranslateY());
+        
+        TranslateTransition vBoxViewDataTransition = new TranslateTransition(Duration.millis(500), this.vBoxViewData);
+        
+        vBoxViewDataTransition.setFromX(this.vBoxViewData.getTranslateX() + 700);
+        vBoxViewDataTransition.setToX(this.vBoxViewData.getTranslateX());
+        
+        TranslateTransition paneChartsTransition = new TranslateTransition(Duration.millis(500), this.paneCharts);
+        
+        paneChartsTransition.setFromX(this.paneCharts.getTranslateX() - 700);
+        paneChartsTransition.setToX(this.paneCharts.getTranslateX());
+        
+        TranslateTransition tpFooterTransition = new TranslateTransition(Duration.millis(500), this.tpFooter);
+        
+        tpFooterTransition.setFromY(this.tpFooter.getTranslateY() + 400);
+        tpFooterTransition.setToY(this.tpFooter.getTranslateY());
+        
+        SequentialTransition sequentialTransition = new SequentialTransition();
+        
+        sequentialTransition.getChildren().addAll(
+                paneNavBarTransition,
+                vBoxViewDataTransition,
+                paneChartsTransition,
+                tpFooterTransition);
+        
+        sequentialTransition.play();
     }
     
     //***************************//
@@ -467,9 +505,9 @@ public class DashboardController implements Initializable {
         this.pieChart.visibleProperty().bind(this.rbPieChart.selectedProperty());
         this.barChart.visibleProperty().bind(this.rbBarChart.selectedProperty());
         this.lineChart.visibleProperty().bind(this.rbLineChart.selectedProperty());
-        this.pieChart.disableProperty().bind(this.rbPieChart.selectedProperty().not());
-        this.barChart.disableProperty().bind(this.rbBarChart.selectedProperty().not());
-        this.lineChart.disableProperty().bind(this.rbLineChart.selectedProperty().not());
+        this.panePieChart.disableProperty().bind(this.rbPieChart.selectedProperty().not());
+        this.paneBarChart.disableProperty().bind(this.rbBarChart.selectedProperty().not());
+        this.paneLineChart.disableProperty().bind(this.rbLineChart.selectedProperty().not());
     }
     
     //*****************************//
@@ -681,9 +719,26 @@ public class DashboardController implements Initializable {
         Scene aboutScene = new Scene(aboutRoot, 500, 200);
         AboutController aboutController = aboutLoader.getController();
         
+        aboutStage.setTitle(VehiclesDashboard.WINDOW_TITLE + "About");
         aboutStage.setScene(aboutScene);
         aboutStage.show();
         aboutController.setScene(aboutScene);
+    }
+    
+    public void displaySettings() throws IOException
+    {
+        Stage settingsStage = new Stage();
+        FXMLLoader settingsLoader = new FXMLLoader(getClass().getResource("Settings.fxml"));
+        Parent settingsRoot = settingsLoader.load();
+        Scene settingsScene = new Scene(settingsRoot, 400, 250);
+        SettingsController settingsController = settingsLoader.getController();
+        
+        settingsStage.setTitle(VehiclesDashboard.WINDOW_TITLE + "Settings");
+        settingsController.vehicleDashboard = this.vehicleDashboard;
+        settingsStage.setScene(settingsScene);
+        settingsStage.show();
+        settingsController.setScene(settingsScene);
+        settingsController.init();
     }
     
     public void refresh()
@@ -921,5 +976,14 @@ public class DashboardController implements Initializable {
         int lastYear = this.getMaxYear();
         
         this.gpBreakdownOverall.add(new Label(startYear + " to " + lastYear), 1, 1);
+    }
+    
+    //*****************//
+    // STYLE FUNCTIONS //
+    //*****************//
+    public void setStyle(String style)
+    {
+        this.scene.getStylesheets().clear();
+        this.scene.getStylesheets().add(style);
     }
 }

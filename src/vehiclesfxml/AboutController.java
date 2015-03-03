@@ -23,10 +23,7 @@ public class AboutController implements Initializable {
     // Window variables
     private Scene scene;
     private Stage stage;
-    
-    /**
-     * Initializes the controller class.
-     */
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
