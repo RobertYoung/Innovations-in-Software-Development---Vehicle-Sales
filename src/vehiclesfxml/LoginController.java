@@ -54,6 +54,7 @@ public class LoginController implements Initializable {
     public void setScene(Scene scene)
     {
         this.scene = scene;
+        this.vehicleDashboard.setStyle();
     }
     
     //*****************//
@@ -87,5 +88,11 @@ public class LoginController implements Initializable {
     public void cancelPressed()
     {
         VehiclesDashboard.closeApplication();
+    }
+
+    public void setStyle(String style) 
+    {
+        this.scene.getStylesheets().clear();
+        this.scene.getStylesheets().add(style);
     }
 }

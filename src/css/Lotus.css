@@ -19,11 +19,29 @@
     -fx-padding: 10 10 10 10;
 }
 
+.moduleWhite { 
+    /* The anchor pane bakcground itself */ 
+    -fx-background-color:#fff;
+    -fx-padding: 10 10 10 10;
+}
+
+.titleHeader {
+    -fx-text-fill:#fff;
+    -fx-font: 24px sans-serif;
+}
+
 .titleText { 
     /* The anchor pane bakcground itself */ 
     -fx-text-fill: #ffffff;
     -fx-font: 46px sans-serif;
     -fx-font-weight: bold; 
+}
+
+.moduleWhiteText { 
+    /* The anchor pane bakcground itself */ 
+    -fx-text-fill: #FFFFFF;
+    -fx-font: 12px sans-serif; 
+    -fx-padding-top: 10px;
 }
 
 .moduleText { 

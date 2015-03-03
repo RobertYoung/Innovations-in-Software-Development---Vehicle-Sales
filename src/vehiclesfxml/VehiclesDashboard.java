@@ -41,7 +41,7 @@ public class VehiclesDashboard extends Application {
     public Stage stage;
     
     // Style variables
-    public String currentStyle;
+    public String currentStyle = "Lotus";
     
     /**
      * @param args the command line arguments
@@ -54,6 +54,7 @@ public class VehiclesDashboard extends Application {
     public void start(Stage stage) throws Exception {
         this.stage = stage;
         
+       // this.displayLogin();
         this.displayDashboard();
         this.setLotusStyle();
         
@@ -108,8 +109,8 @@ public class VehiclesDashboard extends Application {
             stage.show();
             
             this.loginFXML = fxmlLoader.getController();
-            this.loginFXML.setScene(scene);
             this.loginFXML.vehicleDashboard = this;
+            this.loginFXML.setScene(scene);
         }catch (IOException e) {
             e.printStackTrace();
         }
@@ -123,19 +124,20 @@ public class VehiclesDashboard extends Application {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
             Parent root = fxmlLoader.load();            
-            Scene scene = new Scene(root, 1024, 758);
-
+            Scene scene = new Scene(root, 1024, 758);           
+            
             stage.setTitle(VehiclesDashboard.WINDOW_TITLE + "Vehicle Sales Dashboard");
             stage.setScene(scene);
-            stage.centerOnScreen();
-            stage.show();
+            stage.centerOnScreen(); 
             
             this.dashboardFXML = fxmlLoader.getController();
             this.dashboardFXML.setScene(scene);
             this.getSalesData();
             this.dashboardFXML.vehicleDashboard = this;
             this.dashboardFXML.setSalesData(sales);
-            this.dashboardFXML.setupUserInterface();
+            this.dashboardFXML.setupUserInterface();               
+                             
+            stage.show();
         }catch (IOException e) {
             e.printStackTrace();
         }
@@ -166,6 +168,10 @@ public class VehiclesDashboard extends Application {
     
     public void setStyle()
     {
-        this.dashboardFXML.setStyle("css/" + this.currentStyle + ".css");
+        if (this.dashboardFXML != null)
+            this.dashboardFXML.setStyle("css/" + this.currentStyle + ".css");
+        
+        if (this.loginFXML != null)
+            this.loginFXML.setStyle("css/" + this.currentStyle + ".css");
     }
 }

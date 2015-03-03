@@ -1,11 +1,69 @@
 //**********//
+// BACKGROUND //
+//**********//
+.background { 
+    /* The anchor pane bakcground itself */ 
+    -fx-background-color:#00360d;
+}
+
+.moduleColour { 
+    /* The anchor pane bakcground itself */ 
+    -fx-background-color:
+    linear-gradient(#ffd65b, #e68400),
+        linear-gradient(#ffef84, #f2ba44),
+        linear-gradient(#ffea6a, #efaa22),
+        linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),
+        linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));
+    -fx-background-radius: 30;
+    -fx-background-insets: 0,1,2,3,0;
+    -fx-padding: 10 10 10 10;
+}
+
+.moduleWhite { 
+    /* The anchor pane bakcground itself */ 
+    -fx-background-color:#fff;
+    -fx-padding: 10 10 10 10;
+}
+
+.titleHeader {
+    -fx-text-fill:#fff;
+    -fx-font: 24px sans-serif;
+}
+
+.titleText { 
+    /* The anchor pane bakcground itself */ 
+    -fx-text-fill: #ffffff;
+    -fx-font: 46px sans-serif;
+    -fx-font-weight: bold; 
+}
+
+.moduleWhiteText { 
+    /* The anchor pane bakcground itself */ 
+    -fx-text-fill: #FFFFFF;
+    -fx-font: 12px sans-serif; 
+    -fx-padding-top: 10px;
+}
+
+.moduleText { 
+    /* The anchor pane bakcground itself */ 
+    -fx-text-fill: #000000;
+    -fx-font: 12px sans-serif; 
+    -fx-padding-top: 10px;
+}
+
+.moduleTextBold { 
+    /* The anchor pane bakcground itself */ 
+    -fx-text-fill: #000000;
+    -fx-font: 16px sans-serif; 
+    -fx-font-weight: bold;
+}
+
+//**********//
 // MENU BAR //
 //**********//
 .menu-bar { 
     /* The menu bar itself */ 
-    -fx-background-color: 
-        linear-gradient(#141414, #737373);
-    
+    -fx-background-color: linear-gradient(#141414, #737373);
 }
 .menu { 
     /* The File menu item */ 
@@ -13,10 +71,12 @@
 .menu:showing { 
     /* menu when it's being shown (activated) */ 
 }
-.menu .label { 
+//.menu .label { 
     /* Styles the text on a menu item */ 
-    -fx-text-fill: white;
-}
+//    -fx-text-fill: white;
+//}
+
+
 .menu:showing .label { 
     /* Styles the text on a menu item when activated */ 
     -fx-text-fill: black;
@@ -26,7 +86,6 @@
 // BUTTONS //
 //*********//
 .button {
-    /*
     -fx-background-color: 
         linear-gradient(#ffd65b, #e68400),
         linear-gradient(#ffef84, #f2ba44),
@@ -37,11 +96,9 @@
     -fx-background-insets: 0,1,2,3,0;
     -fx-text-fill: #654b00;
     -fx-font-weight: bold;
-    -fx-font-size: 14px;
-    -fx-padding: 10 20 10 20;
-    */
+    -fx-font-size: 11px;
+    //-fx-padding: 10 20 10 20;
 }
-
 
 .button:hover {
     //-fx-background-color: #3a3a3a;
@@ -82,6 +139,36 @@
     -fx-background-color: derive(-fx-focus-color,30%);
     */
 }
+
+.menu-button
+{
+    -fx-background-color: 
+        linear-gradient(#ffd65b, #e68400),
+        linear-gradient(#ffef84, #f2ba44),
+        linear-gradient(#ffea6a, #efaa22),
+        linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),
+        linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));
+    -fx-background-radius: 30;
+    -fx-background-insets: 0,1,2,3,0;
+    -fx-text-fill: #654b00;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+}
+
+/*.combo-box
+{
+    -fx-background-color: 
+        linear-gradient(#ffd65b, #e68400),
+        linear-gradient(#ffef84, #f2ba44),
+        linear-gradient(#ffea6a, #efaa22),
+        linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),
+        linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));
+    -fx-background-radius: 30;
+    -fx-background-insets: 0,1,2,3,0;
+    -fx-text-fill: #654b00;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+}*/
 
 //************//
 // TABLE VIEW //

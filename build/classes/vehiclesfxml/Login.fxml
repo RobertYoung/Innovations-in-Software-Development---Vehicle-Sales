@@ -9,15 +9,15 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="300.0" prefWidth="500.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="vehiclesfxml.LoginController">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="300.0" prefWidth="500.0" styleClass="background" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vehiclesfxml.LoginController">
   <children>
     <GridPane layoutX="80.0" layoutY="125.0" prefWidth="322.0">
       <children>
         <TextField fx:id="txtUsername" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
         <PasswordField fx:id="txtPassword" onAction="#loginPressed" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-        <Label text="Username" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-        <Label text="Password" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-        <Label prefWidth="140.0" text="Login" GridPane.columnIndex="0" GridPane.rowIndex="0">
+        <Label styleClass="moduleWhiteText" text="Username" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <Label styleClass="moduleWhiteText" text="Password" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <Label prefWidth="140.0" styleClass="titleHeader" text="Login" GridPane.columnIndex="0" GridPane.rowIndex="0">
           <font>
             <Font name="System Bold" size="20.0" />
           </font>
@@ -33,11 +33,11 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       </rowConstraints>
     </GridPane>
-    <Label layoutX="193.0" layoutY="267.0" text="admin / password" />
+    <Label layoutX="193.0" layoutY="267.0" styleClass="moduleWhiteText" text="admin / password" />
     <ImageView fitHeight="89.0" fitWidth="118.66666666666666" layoutX="12.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
-      <image>
-        <Image url="@lotus.png" />
-      </image>
+         <image>
+            <Image url="@../images/lotus.png" />
+         </image>
     </ImageView>
     <Button layoutX="345.0" layoutY="215.0" mnemonicParsing="false" onAction="#loginPressed" text="Login" />
     <Button layoutX="276.0" layoutY="215.0" mnemonicParsing="false" onAction="#cancelPressed" text="Cancel" />

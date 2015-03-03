@@ -90,7 +90,7 @@ public class DashboardController implements Initializable {
     private AnchorPane anchorPane;
     
     // Layouts
-    private Pane paneNavBar;
+    public Pane paneNavBar;
     private VBox vBoxLeft;
     private HBox hBoxYearCheckboxes;
     private HBox hBoxChartSelection;
@@ -264,6 +264,7 @@ public class DashboardController implements Initializable {
         this.setupTop3();
         this.setupBreakdown();
         this.setupBreakdownOverall();
+        this.vehicleDashboard.setStyle();
         this.setupInterfaceAnimations();
     }
     
@@ -851,6 +852,7 @@ public class DashboardController implements Initializable {
             ivTrophy.setFitHeight(20);
             ivTrophy.setFitWidth(20);
 
+            //label.getStyleClass().add("dataText");
             label.setPadding(new Insets(0, 0, 0, 30));
             
             this.gpTop3.add(ivTrophy, i + 1, 0);

@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vehiclesfxml.DashboardController">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="768.0" prefWidth="1024.0" styleClass="background" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vehiclesfxml.DashboardController">
   <children>
     <MenuBar prefHeight="25.0" prefWidth="1024.0" style="&#10;">
       <menus>
@@ -29,11 +29,11 @@
         </Menu>
       </menus>
     </MenuBar>
-    <Pane fx:id="paneNavBar" layoutX="14.0" layoutY="39.0" prefHeight="112.0" prefWidth="986.0" style="-fx-border-color: #000;&#10;">
+    <Pane fx:id="paneNavBar" layoutX="14.0" layoutY="39.0" prefHeight="112.0" prefWidth="986.0">
       <children>
         <HBox fx:id="topHBox" alignment="TOP_LEFT" layoutX="221.0" layoutY="14.0" minHeight="36.0" prefHeight="36.0" prefWidth="754.0" style="&#10;">
           <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefWidth="569.0" text="Lotus Sales Dashboard" textAlignment="CENTER" textOverrun="ELLIPSIS" wrapText="true">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefWidth="569.0" styleClass="titleText" text="Lotus Sales Dashboard" textAlignment="CENTER" textOverrun="ELLIPSIS" wrapText="true">
               <font>
                 <Font size="25.0" />
               </font>
@@ -69,13 +69,13 @@
               </light>
             </Lighting>
           </effect>
-          <image>
-            <Image url="@lotus.png" />
-          </image>
+               <image>
+                  <Image url="@../images/lotus.png" />
+               </image>
         </ImageView>
       </children>
     </Pane>
-    <Pane fx:id="paneCharts" layoutX="14.0" layoutY="166.0" prefHeight="461.0" prefWidth="461.0" style="-fx-border-color: #000;">
+    <Pane fx:id="paneCharts" layoutX="14.0" layoutY="166.0" prefHeight="461.0" prefWidth="461.0" styleClass="moduleColour">
       <children>
         <VBox fx:id="vBoxLeft" prefHeight="76.0" prefWidth="461.0">
           <children>
@@ -150,7 +150,7 @@
         </Pane>
       </children>
     </Pane>
-    <VBox fx:id="vBoxViewData" layoutX="485.0" layoutY="166.0" prefHeight="461.0" prefWidth="515.0" style="-fx-border-color: #000;">
+    <VBox fx:id="vBoxViewData" layoutX="485.0" layoutY="166.0" prefHeight="461.0" prefWidth="515.0" styleClass="moduleColour">
       <children>
         <HBox alignment="TOP_CENTER" prefHeight="21.0" prefWidth="513.0">
           <children>
@@ -199,7 +199,7 @@
       <tabs>
         <Tab fx:id="tabTop3" text="Top 3">
           <content>
-            <AnchorPane id="Content" fx:id="apTop3" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+            <AnchorPane id="Content" fx:id="apTop3" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="moduleWhite">
               <children>
                 <GridPane fx:id="gpTop3" alignment="CENTER" gridLinesVisible="false" layoutX="0.0" layoutY="0.0" prefHeight="59.0" prefWidth="742.0">
                   <children>
@@ -224,7 +224,7 @@
         </Tab>
         <Tab text="Breakdown">
           <content>
-            <AnchorPane id="Content" fx:id="apBreakdown" minHeight="0.0" minWidth="0.0" prefHeight="66.0" prefWidth="986.0">
+            <AnchorPane id="Content" fx:id="apBreakdown" minHeight="0.0" minWidth="0.0" prefHeight="66.0" prefWidth="986.0" styleClass="moduleWhite">
               <children>
                 <GridPane fx:id="gpBreakdown" layoutX="500.0" layoutY="10.0" maxHeight="90.0" prefWidth="483.0">
                   <children>
