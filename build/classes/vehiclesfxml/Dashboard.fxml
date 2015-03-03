@@ -14,11 +14,12 @@
 
 <AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vehiclesfxml.DashboardController">
   <children>
-    <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="1024.0" style="&#10;">
+    <MenuBar prefHeight="25.0" prefWidth="1024.0" style="&#10;">
       <menus>
-        <Menu mnemonicParsing="false" onAction="#closeApplication" text="File">
+        <Menu mnemonicParsing="false" text="File">
           <items>
-            <MenuItem mnemonicParsing="false" text="Exit" />
+            <MenuItem mnemonicParsing="false" onAction="#closeApplication" text="Exit" />
+                  <MenuItem mnemonicParsing="false" onAction="#displaySettings" text="Settings" />
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
@@ -31,7 +32,7 @@
         <URL value="@Style.css" />
       </stylesheets>
     </MenuBar>
-    <Pane layoutX="14.0" layoutY="39.0" prefHeight="112.0" prefWidth="986.0" style="-fx-border-color: #000;&#10;">
+    <Pane fx:id="paneNavBar" layoutX="14.0" layoutY="39.0" prefHeight="112.0" prefWidth="986.0" style="-fx-border-color: #000;&#10;">
       <children>
         <HBox fx:id="topHBox" alignment="TOP_LEFT" layoutX="221.0" layoutY="14.0" minHeight="36.0" prefHeight="36.0" prefWidth="754.0" style="&#10;">
           <children>

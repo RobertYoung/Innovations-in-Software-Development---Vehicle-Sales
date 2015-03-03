@@ -40,6 +40,9 @@ public class VehiclesDashboard extends Application {
     // Stage variables
     public Stage stage;
     
+    // Style variables
+    public String currentStyle;
+    
     /**
      * @param args the command line arguments
      */
@@ -50,6 +53,8 @@ public class VehiclesDashboard extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         this.stage = stage;
+        this.setLotusStyle();
+        
         this.displayDashboard();
         /*
         try {
@@ -141,5 +146,18 @@ public class VehiclesDashboard extends Application {
     public static void closeApplication()
     {
         Platform.exit();
+    }
+    
+    //*****************//
+    // STYLE FUNCTIONS //
+    //*****************//
+    public void setLotusStyle()
+    {
+        this.currentStyle = "Lotus";
+    }
+    
+    public void setContrastStyle()
+    {
+        this.currentStyle = "Contrast";
     }
 }
