@@ -12,19 +12,21 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="768.0" prefWidth="1024.0" styleClass="background" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vehiclesfxml.DashboardController">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="768.0" prefWidth="1024.0" styleClass="background" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="vehiclesfxml.DashboardController">
   <children>
     <MenuBar prefHeight="25.0" prefWidth="1024.0" style="&#10;">
       <menus>
         <Menu mnemonicParsing="false" text="File">
           <items>
-            <MenuItem mnemonicParsing="false" onAction="#closeApplication" text="Exit" />
-                  <MenuItem mnemonicParsing="false" onAction="#displaySettings" text="Settings" />
+            <MenuItem mnemonicParsing="false" onAction="#displaySettings" text="Settings" fx:id="menuItemSettings" />
+            <MenuItem mnemonicParsing="false" text="Refresh" fx:id="menuItemRefresh" />
+            <MenuItem mnemonicParsing="false" text="Logout" fx:id="menuItemLogout" />
+            <MenuItem mnemonicParsing="false" onAction="#closeApplication" text="Exit" fx:id="menuItemExit" />
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
           <items>
-            <MenuItem mnemonicParsing="false" onAction="#displayAboutInfo" text="About" />
+            <MenuItem mnemonicParsing="false" onAction="#displayAboutInfo" text="About" fx:id="menuItemAbout" />
           </items>
         </Menu>
       </menus>
@@ -47,13 +49,13 @@
         </HBox>
         <HBox alignment="BOTTOM_RIGHT" layoutX="26.0" layoutY="58.0" prefHeight="40.0" prefWidth="951.0">
           <children>
-            <MenuButton alignment="CENTER_RIGHT" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" popupSide="BOTTOM" stylesheets="@Style.css" text="Options" underline="false">
+            <MenuButton alignment="CENTER_RIGHT" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" popupSide="BOTTOM" text="Options" underline="false">
               <items>
-                <MenuItem mnemonicParsing="false" onAction="#refresh" text="Refresh" />
-                <MenuItem mnemonicParsing="false" onAction="#print" text="Print" />
-                        <MenuItem mnemonicParsing="false" onAction="#displaySettings" text="Settings" />
-                <MenuItem mnemonicParsing="false" onAction="#logout" text="Log Out" />
-                <MenuItem mnemonicParsing="false" onAction="#closeApplication" text="Exit" />
+                <MenuItem mnemonicParsing="false" onAction="#refresh" text="Refresh" fx:id="menuItemOptionsRefresh" />
+                <MenuItem mnemonicParsing="false" onAction="#print" text="Print" fx:id="menuItemOptionsPrint" />
+                <MenuItem mnemonicParsing="false" onAction="#displaySettings" text="Settings" fx:id="menuItemOptionsSettings" />
+                <MenuItem mnemonicParsing="false" onAction="#logout" text="Log Out" fx:id="menuItemOptionsLogout" />
+                <MenuItem mnemonicParsing="false" onAction="#closeApplication" text="Exit" fx:id="menuItemOptionsExit" />
               </items>
             </MenuButton>
           </children>
@@ -69,9 +71,9 @@
               </light>
             </Lighting>
           </effect>
-               <image>
-                  <Image url="@../images/lotus.png" />
-               </image>
+          <image>
+            <Image url="@../images/lotus.png" />
+          </image>
         </ImageView>
       </children>
     </Pane>
@@ -115,10 +117,7 @@
         </VBox>
         <Pane fx:id="panePieChart" layoutY="80.0" prefHeight="398.0" prefWidth="461.0">
           <children>
-            <PieChart fx:id="pieChart" prefHeight="383.0" prefWidth="459.0" visible="false">
-                     <cursor>
-                        <Cursor fx:constant="CROSSHAIR" />
-                     </cursor></PieChart>
+            <PieChart fx:id="pieChart" prefHeight="383.0" prefWidth="459.0" visible="false" />
           </children>
         </Pane>
         <Pane fx:id="paneBarChart" layoutY="80.0" prefHeight="398.0" prefWidth="461.0">
@@ -130,9 +129,6 @@
               <yAxis>
                 <NumberAxis side="LEFT" />
               </yAxis>
-                     <cursor>
-                        <Cursor fx:constant="CROSSHAIR" />
-                     </cursor>
             </BarChart>
           </children>
         </Pane>

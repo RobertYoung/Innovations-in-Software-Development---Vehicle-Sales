@@ -58,6 +58,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TabPane;
@@ -146,6 +147,28 @@ public class DashboardController implements Initializable {
     private GridPane gpTop3;
     private GridPane gpBreakdown;
     public GridPane gpBreakdownOverall;
+    
+    // Menu item
+    @FXML 
+    private MenuItem menuItemRefresh;
+    @FXML 
+    private MenuItem menuItemLogout;
+    @FXML 
+    private MenuItem menuItemExit;
+    @FXML
+    private MenuItem menuItemSettings;
+    @FXML
+    private MenuItem menuItemAbout;
+    @FXML 
+    private MenuItem menuItemOptionsRefresh;
+    @FXML 
+    private MenuItem menuItemOptionsPrint;
+    @FXML 
+    private MenuItem menuItemOptionsSettings;
+    @FXML 
+    private MenuItem menuItemOptionsLogout;
+    @FXML 
+    private MenuItem menuItemOptionsExit;
     
     // Dashboard variables
     public VehiclesDashboard vehicleDashboard;
@@ -264,6 +287,7 @@ public class DashboardController implements Initializable {
         this.setupTop3();
         this.setupBreakdown();
         this.setupBreakdownOverall();
+        this.setupMenuItemImages();
         this.vehicleDashboard.setStyle();
         this.setupInterfaceAnimations();
     }
@@ -388,7 +412,7 @@ public class DashboardController implements Initializable {
                 
                 caption.setTranslateX(bounds.getMaxX() - 70);
                 caption.setTranslateY(bounds.getMaxY() + 180);
-                caption.setText(String.valueOf(((int)qtr.getPieValue())));
+                caption.setText(String.valueOf(((int)qtr.getPieValue())) + " sold");
                 ObservableList<Node> children = getChildren();
                 
                 if (children.indexOf(caption) == -1)
@@ -806,7 +830,7 @@ public class DashboardController implements Initializable {
     // IMAGE FUNCTIONS //
     //*****************//
     private void setupLogo() {
-        Image logo = new Image(getClass().getResource("lotus.png").toExternalForm());
+        Image logo = new Image(getClass().getClassLoader().getResource("images/lotus.png").toExternalForm());
         
         this.ivLogo.setImage(logo);
         this.ivLogo.setCursor(Cursor.HAND);
@@ -846,7 +870,7 @@ public class DashboardController implements Initializable {
             String vehicle = vehicleTop3.get(i).entrySet().stream().findFirst().get().getKey();
             IntSummaryStatistics statistics = vehicleTop3.get(i).entrySet().stream().findFirst().get().getValue();
             Label label = new Label(vehicle + " (" + statistics.getSum() + ")");
-            Image trophy = new Image(getClass().getResource(imageFile + ".png").toExternalForm());
+            Image trophy = new Image(getClass().getClassLoader().getResource("images/" + imageFile + ".png").toExternalForm());
             ImageView ivTrophy = new ImageView(trophy);
 
             ivTrophy.setFitHeight(20);
@@ -862,7 +886,7 @@ public class DashboardController implements Initializable {
             String region = regionTop3.get(i).entrySet().stream().findFirst().get().getKey();
             IntSummaryStatistics regionStatistics = regionTop3.get(i).entrySet().stream().findFirst().get().getValue();
             Label labelRegion = new Label(region + " (" + regionStatistics.getSum() + ")");
-            Image trophyRegion = new Image(getClass().getResource(imageFile + ".png").toExternalForm());
+            Image trophyRegion = new Image(getClass().getClassLoader().getResource("images/" + imageFile + ".png").toExternalForm());
             ImageView ivTrophyRegion = new ImageView(trophyRegion);
             
             ivTrophyRegion.setFitHeight(20);
@@ -987,5 +1011,37 @@ public class DashboardController implements Initializable {
     {
         this.scene.getStylesheets().clear();
         this.scene.getStylesheets().add(style);
+    }
+
+    //*****************//
+    // IMAGE FUNCTIONS //
+    //*****************//
+    private void setupMenuItemImages() {
+        // Exit
+        this.menuItemRefresh.setGraphic(this.getMenuItemImageView("refresh"));
+        this.menuItemLogout.setGraphic(this.getMenuItemImageView("logout"));
+        this.menuItemExit.setGraphic(this.getMenuItemImageView("exit"));
+        this.menuItemSettings.setGraphic(this.getMenuItemImageView("settings"));
+        this.menuItemAbout.setGraphic(this.getMenuItemImageView("info"));
+        this.menuItemOptionsRefresh.setGraphic(this.getMenuItemImageView("refresh"));
+        this.menuItemOptionsPrint.setGraphic(this.getMenuItemImageView("print"));
+        this.menuItemOptionsSettings.setGraphic(this.getMenuItemImageView("settings"));
+        this.menuItemOptionsLogout.setGraphic(this.getMenuItemImageView("logout"));
+        this.menuItemOptionsExit.setGraphic(this.getMenuItemImageView("exit"));
+    }
+    
+    private Image getImage(String name)
+    {
+        return new Image(getClass().getClassLoader().getResource("images/" + name + ".png").toExternalForm());
+    }
+    
+    private ImageView getMenuItemImageView(String name)
+    {
+        ImageView imageView = new ImageView(this.getImage(name));
+        
+        imageView.setFitHeight(20);
+        imageView.setFitWidth(20);
+        
+        return imageView;
     }
 }
