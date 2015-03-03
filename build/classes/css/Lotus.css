@@ -1,6 +1,6 @@
-//**********//
+//************//
 // BACKGROUND //
-//**********//
+//************//
 .background { 
     /* The anchor pane bakcground itself */ 
     -fx-background-color:#00360d;
@@ -23,6 +23,14 @@
     /* The anchor pane bakcground itself */ 
     -fx-background-color:#fff;
     -fx-padding: 10 10 10 10;
+}
+
+//******//
+// TEXT //
+//******//
+.labelWhite {
+    -fx-text-fill: #fff;
+    -fx-font: 16px sans-serif; 
 }
 
 .titleHeader {

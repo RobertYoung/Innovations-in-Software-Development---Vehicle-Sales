@@ -51,6 +51,7 @@ public class SettingsController implements Initializable {
     {
         this.scene = scene;
         this.stage = (Stage)this.scene.getWindow();
+        this.vehicleDashboard.setStyle();
     }
     
     public void closeSettingsView()
@@ -81,5 +82,14 @@ public class SettingsController implements Initializable {
             }
             
         });
+    }
+    
+    //*****************//
+    // STYLE FUNCTIONS //
+    //*****************//
+    public void setStyle(String style) 
+    {
+        this.scene.getStylesheets().clear();
+        this.scene.getStylesheets().add(style);
     }
 }

@@ -90,6 +90,9 @@ public class LoginController implements Initializable {
         VehiclesDashboard.closeApplication();
     }
 
+    //*****************//
+    // STYLE FUNCTIONS //
+    //*****************//
     public void setStyle(String style) 
     {
         this.scene.getStylesheets().clear();

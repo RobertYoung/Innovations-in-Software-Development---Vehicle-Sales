@@ -23,6 +23,9 @@ public class AboutController implements Initializable {
     // Window variables
     private Scene scene;
     private Stage stage;
+    
+    // Dashboard variables
+    public VehiclesDashboard vehicleDashboard;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -36,10 +39,20 @@ public class AboutController implements Initializable {
     {
         this.scene = scene;
         this.stage = (Stage)this.scene.getWindow();
+        this.vehicleDashboard.setStyle();
     }
     
     public void closeAboutView()
     {
         stage.close();
+    }
+    
+    //*****************//
+    // STYLE FUNCTIONS //
+    //*****************//
+    public void setStyle(String style) 
+    {
+        this.scene.getStylesheets().clear();
+        this.scene.getStylesheets().add(style);
     }
 }

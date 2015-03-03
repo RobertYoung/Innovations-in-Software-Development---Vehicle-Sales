@@ -33,6 +33,8 @@ public class VehiclesDashboard extends Application {
     // FXML variables
     private DashboardController dashboardFXML;
     private LoginController loginFXML;
+    private SettingsController settingsFXML;
+    private AboutController aboutFXML;
     
     // Statis constant variables
     public static String WINDOW_TITLE = "| LOTUS | ";
@@ -143,6 +145,43 @@ public class VehiclesDashboard extends Application {
         }
     }
     
+    //*****************//
+    // ABOUT FUNCTIONS //
+    //*****************//
+    public void displayAboutInfo() throws IOException
+    {
+        Stage aboutStage = new Stage();
+        FXMLLoader aboutLoader = new FXMLLoader(getClass().getResource("About.fxml"));
+        Parent aboutRoot = aboutLoader.load();
+        Scene aboutScene = new Scene(aboutRoot, 500, 200);
+        aboutFXML = aboutLoader.getController();
+        
+        aboutFXML.vehicleDashboard = this;
+        aboutStage.setTitle(VehiclesDashboard.WINDOW_TITLE + "About");
+        aboutStage.setScene(aboutScene);
+        aboutStage.show();
+        aboutFXML.setScene(aboutScene);
+    }
+    
+    //********************//
+    // SETTINGS FUNCTIONS //
+    //********************//
+    public void displaySettings() throws IOException
+    {
+        Stage settingsStage = new Stage();
+        FXMLLoader settingsLoader = new FXMLLoader(getClass().getResource("Settings.fxml"));
+        Parent settingsRoot = settingsLoader.load();
+        Scene settingsScene = new Scene(settingsRoot, 400, 250);
+        settingsFXML = settingsLoader.getController();
+        
+        settingsStage.setTitle(VehiclesDashboard.WINDOW_TITLE + "Settings");
+        settingsFXML.vehicleDashboard = this;
+        settingsStage.setScene(settingsScene);
+        settingsStage.show();
+        settingsFXML.setScene(settingsScene);
+        settingsFXML.init();
+    }
+    
     //***********************//
     // APPLICATION FUNCTIONS //
     //***********************//
@@ -173,5 +212,11 @@ public class VehiclesDashboard extends Application {
         
         if (this.loginFXML != null)
             this.loginFXML.setStyle("css/" + this.currentStyle + ".css");
+        
+        if (this.settingsFXML != null)
+            this.settingsFXML.setStyle("css/" + this.currentStyle + ".css");
+        
+        if (this.aboutFXML != null)
+            this.aboutFXML.setStyle("css/" + this.currentStyle + ".css");
     }
 }

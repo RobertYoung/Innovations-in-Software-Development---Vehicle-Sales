@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="200.0" prefWidth="500.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="vehiclesfxml.AboutController">
+<AnchorPane id="AnchorPane" prefHeight="200.0" prefWidth="500.0" styleClass="background" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="vehiclesfxml.AboutController">
   <children>
     <HBox alignment="CENTER_RIGHT" layoutX="14.0" layoutY="154.0" prefHeight="32.0" prefWidth="472.0">
       <children>

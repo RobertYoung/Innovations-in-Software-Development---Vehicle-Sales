@@ -736,36 +736,6 @@ public class DashboardController implements Initializable {
         dialogStage.show();   
     }
     
-    public void displayAboutInfo() throws IOException
-    {
-        Stage aboutStage = new Stage();
-        FXMLLoader aboutLoader = new FXMLLoader(getClass().getResource("About.fxml"));
-        Parent aboutRoot = aboutLoader.load();
-        Scene aboutScene = new Scene(aboutRoot, 500, 200);
-        AboutController aboutController = aboutLoader.getController();
-        
-        aboutStage.setTitle(VehiclesDashboard.WINDOW_TITLE + "About");
-        aboutStage.setScene(aboutScene);
-        aboutStage.show();
-        aboutController.setScene(aboutScene);
-    }
-    
-    public void displaySettings() throws IOException
-    {
-        Stage settingsStage = new Stage();
-        FXMLLoader settingsLoader = new FXMLLoader(getClass().getResource("Settings.fxml"));
-        Parent settingsRoot = settingsLoader.load();
-        Scene settingsScene = new Scene(settingsRoot, 400, 250);
-        SettingsController settingsController = settingsLoader.getController();
-        
-        settingsStage.setTitle(VehiclesDashboard.WINDOW_TITLE + "Settings");
-        settingsController.vehicleDashboard = this.vehicleDashboard;
-        settingsStage.setScene(settingsScene);
-        settingsStage.show();
-        settingsController.setScene(settingsScene);
-        settingsController.init();
-    }
-    
     public void refresh()
     {
         System.out.println("Refresh");
@@ -807,6 +777,16 @@ public class DashboardController implements Initializable {
         });
         
         new Thread(task).start();
+    }
+    
+    public void displaySettings() throws IOException
+    {
+        this.vehicleDashboard.displaySettings();
+    }
+    
+    public void displayAboutInfo() throws IOException
+    {
+        this.vehicleDashboard.displayAboutInfo();
     }
 
     //*********************//
@@ -1017,7 +997,6 @@ public class DashboardController implements Initializable {
     // IMAGE FUNCTIONS //
     //*****************//
     private void setupMenuItemImages() {
-        // Exit
         this.menuItemRefresh.setGraphic(this.getMenuItemImageView("refresh"));
         this.menuItemLogout.setGraphic(this.getMenuItemImageView("logout"));
         this.menuItemExit.setGraphic(this.getMenuItemImageView("exit"));
