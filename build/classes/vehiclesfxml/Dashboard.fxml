@@ -116,7 +116,7 @@
         </VBox>
         <Pane fx:id="panePieChart" layoutY="80.0" prefHeight="398.0" prefWidth="461.0">
           <children>
-            <PieChart fx:id="pieChart" onMouseEntered="#displayPieDetails" prefHeight="383.0" prefWidth="459.0" visible="false" />
+            <PieChart fx:id="pieChart" prefHeight="383.0" prefWidth="459.0" visible="false" />
           </children>
         </Pane>
         <Pane fx:id="paneBarChart" layoutY="80.0" prefHeight="398.0" prefWidth="461.0">
