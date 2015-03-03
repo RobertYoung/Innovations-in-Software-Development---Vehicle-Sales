@@ -25,7 +25,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javafx.animation.Animation;
-import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -59,6 +58,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -137,6 +137,9 @@ public class DashboardController implements Initializable {
     private Button btnSearch;
     
     // Footer
+    public TabPane tpFooter;
+    public AnchorPane apTop3;
+    public AnchorPane apBreakdown;
     private GridPane gpTop3;
     private GridPane gpBreakdown;
     public GridPane gpBreakdownOverall;
@@ -188,8 +191,9 @@ public class DashboardController implements Initializable {
         this.ivLogo = (ImageView)this.anchorPane.lookup("#ivLogo");
         
         // Footer
-        this.gpTop3 = (GridPane)this.anchorPane.lookup("#gpTop3");
-        this.gpBreakdown = (GridPane)this.anchorPane.lookup("#gpBreakdown");
+        this.tpFooter = (TabPane)this.anchorPane.lookup("#tpFooter");
+        this.gpTop3 = (GridPane)this.apTop3.lookup("#gpTop3");
+        this.gpBreakdown = (GridPane)this.apBreakdown.lookup("#gpBreakdown");
     }    
     
     //*****************//
@@ -337,9 +341,7 @@ public class DashboardController implements Initializable {
         
         this.pieChart.setData(pieData);
         
-        for (int i = 0; i < pieData.size(); i++)
-        {
-            PieChart.Data qtr = pieData.get(i);
+        pieData.stream().forEach((qtr) -> {
             Label caption = new Label("");
             
             qtr.getNode().addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
@@ -365,10 +367,10 @@ public class DashboardController implements Initializable {
                     ObservableList<Node> children = getChildren();
                     
                     if (children.indexOf(caption) != -1)
-                         caption.visibleProperty().set(false);
+                        caption.visibleProperty().set(false);
                 }
             });
-        }
+        });
         
         this.pieChart.labelsVisibleProperty().set(true);
         this.pieChart.setTitle("Quarterly Sales Figues for " + year);
@@ -465,6 +467,9 @@ public class DashboardController implements Initializable {
         this.pieChart.visibleProperty().bind(this.rbPieChart.selectedProperty());
         this.barChart.visibleProperty().bind(this.rbBarChart.selectedProperty());
         this.lineChart.visibleProperty().bind(this.rbLineChart.selectedProperty());
+        this.pieChart.disableProperty().bind(this.rbPieChart.selectedProperty().not());
+        this.barChart.disableProperty().bind(this.rbBarChart.selectedProperty().not());
+        this.lineChart.disableProperty().bind(this.rbLineChart.selectedProperty().not());
     }
     
     //*****************************//

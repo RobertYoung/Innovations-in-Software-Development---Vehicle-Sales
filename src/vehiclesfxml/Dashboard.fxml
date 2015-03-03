@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="768.0" prefWidth="1024.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="vehiclesfxml.DashboardController">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vehiclesfxml.DashboardController">
   <children>
     <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="1024.0" style="&#10;">
       <menus>
@@ -49,7 +49,7 @@
         </HBox>
         <HBox alignment="BOTTOM_RIGHT" layoutX="26.0" layoutY="58.0" prefHeight="40.0" prefWidth="951.0">
           <children>
-            <MenuButton alignment="CENTER_RIGHT" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" popupSide="BOTTOM" text="Options" underline="false">
+            <MenuButton alignment="CENTER_RIGHT" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" popupSide="BOTTOM" stylesheets="@Style.css" text="Options" underline="false">
               <items>
                 <MenuItem mnemonicParsing="false" onAction="#refresh" text="Refresh" />
                 <MenuItem mnemonicParsing="false" onAction="#print" text="Print" />
@@ -116,7 +116,10 @@
         </VBox>
         <Pane fx:id="panePieChart" layoutY="80.0" prefHeight="398.0" prefWidth="461.0">
           <children>
-            <PieChart fx:id="pieChart" prefHeight="383.0" prefWidth="459.0" visible="false" />
+            <PieChart fx:id="pieChart" prefHeight="383.0" prefWidth="459.0" visible="false">
+                     <cursor>
+                        <Cursor fx:constant="CROSSHAIR" />
+                     </cursor></PieChart>
           </children>
         </Pane>
         <Pane fx:id="paneBarChart" layoutY="80.0" prefHeight="398.0" prefWidth="461.0">
@@ -190,11 +193,11 @@
         </TableView>
       </children>
     </VBox>
-    <TabPane layoutX="14.0" layoutY="653.0" prefHeight="101.0" prefWidth="986.0" tabClosingPolicy="UNAVAILABLE">
+    <TabPane fx:id="tpFooter" layoutX="14.0" layoutY="653.0" prefHeight="101.0" prefWidth="986.0" tabClosingPolicy="UNAVAILABLE">
       <tabs>
-        <Tab text="Top 3">
+        <Tab fx:id="tabTop3" text="Top 3">
           <content>
-            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+            <AnchorPane id="Content" fx:id="apTop3" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
               <children>
                 <GridPane fx:id="gpTop3" alignment="CENTER" gridLinesVisible="false" layoutX="0.0" layoutY="0.0" prefHeight="59.0" prefWidth="742.0">
                   <children>
@@ -219,7 +222,7 @@
         </Tab>
         <Tab text="Breakdown">
           <content>
-            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="66.0" prefWidth="986.0">
+            <AnchorPane id="Content" fx:id="apBreakdown" minHeight="0.0" minWidth="0.0" prefHeight="66.0" prefWidth="986.0">
               <children>
                 <GridPane fx:id="gpBreakdown" layoutX="500.0" layoutY="10.0" maxHeight="90.0" prefWidth="483.0">
                   <children>
