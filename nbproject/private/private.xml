@@ -3,8 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< Updated upstream
             <file>file:/G:/Innovations%20Assignment%203/src/vehiclesfxml/VehiclesDashboard.java</file>
             <file>file:/G:/Innovations%20Assignment%203/src/vehiclesfxml/DashboardController.java</file>
+=======
+            <file>file:/Users/apple/Documents/JavaFX/Vehicle%20Sales%20Dashboard/src/vehiclesfxml/DashboardController.java</file>
+            <file>file:/Users/apple/Documents/JavaFX/Vehicle%20Sales%20Dashboard/src/css/Lotus.css</file>
+>>>>>>> Stashed changes
         </group>
     </open-files>
 </project-private>
