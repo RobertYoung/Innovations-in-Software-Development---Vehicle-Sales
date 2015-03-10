@@ -18,3 +18,5 @@ THINGS TO DO:
 - ~~Total Orders p/year on footer~~
 - ~~Percentage split over the years~~
 - ~~Create a CSS file and apply styles to all elements~~
+- Auto-Refresh
+- Multiple selection on the table view

@@ -111,7 +111,7 @@
             </VBox>
             <HBox fx:id="hBoxYearCheckboxes" alignment="CENTER" prefHeight="45.0" prefWidth="459.0">
               <children>
-                <ComboBox fx:id="comboBoxYears" onAction="#setupPieChart" prefWidth="150.0">
+                <ComboBox fx:id="comboBoxYears" prefWidth="150.0">
                   <HBox.margin>
                     <Insets left="30.0" right="50.0" />
                   </HBox.margin>

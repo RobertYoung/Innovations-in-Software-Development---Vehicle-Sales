@@ -5,14 +5,9 @@
  */
 package vehiclesfxml;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import java.awt.Desktop;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.reflect.Method;
-import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -31,22 +26,19 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
 import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
@@ -144,10 +136,9 @@ public class DashboardController implements Initializable {
     
     // View data
     private TableView tvData;
-    private TableColumn colYear;
     private TextField txtSearchInput;
     private List<CheckBox> cbFilters;
-    private BooleanProperty search = new SimpleBooleanProperty(false);
+    private final BooleanProperty search = new SimpleBooleanProperty(false);
     private Button btnReset;
     private Button btnSearch;
     private GridPane gpFilters;
@@ -290,6 +281,7 @@ public class DashboardController implements Initializable {
     //***************************//
     public void setupUserInterfaceInitial()
     {
+        this.setupDateTimeLabel();
         this.vehicleDashboard.setStyle();
         this.setupInterfaceAnimations();
         this.progressIndicator.visibleProperty().bind(this.vehicleDashboard.service.runningProperty());
@@ -308,7 +300,6 @@ public class DashboardController implements Initializable {
         this.setupChartSelection();
         this.setupTableView();
         this.setupFilterTableData();
-        this.setupDateTimeLabel();
         this.setupLogo();
         this.setupTop3();
         this.setupBreakdown();
@@ -395,6 +386,12 @@ public class DashboardController implements Initializable {
         }
 
         this.comboBoxYears.getSelectionModel().selectFirst();
+        this.comboBoxYears.valueProperty().addListener(new ChangeListener<String>() {
+            @Override 
+            public void changed(ObservableValue ov, String t, String t1) {                
+                setupPieChart();               
+            }    
+        });
     }
     
     //*********************//
