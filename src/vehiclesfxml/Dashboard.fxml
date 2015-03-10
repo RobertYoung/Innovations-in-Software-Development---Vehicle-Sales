@@ -12,21 +12,21 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="768.0" prefWidth="1024.0" styleClass="background" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vehiclesfxml.DashboardController">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="768.0" prefWidth="1024.0" styleClass="background" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="vehiclesfxml.DashboardController">
   <children>
     <MenuBar prefHeight="25.0" prefWidth="1024.0" style="&#10;">
       <menus>
         <Menu mnemonicParsing="false" text="File">
           <items>
-            <MenuItem fx:id="menuItemSettings" mnemonicParsing="false" onAction="#displaySettings" text="Settings" />
-            <MenuItem fx:id="menuItemRefresh" mnemonicParsing="false" text="Refresh" />
-            <MenuItem fx:id="menuItemLogout" mnemonicParsing="false" text="Logout" />
-            <MenuItem fx:id="menuItemExit" mnemonicParsing="false" onAction="#closeApplication" text="Exit" />
+            <MenuItem mnemonicParsing="false" onAction="#displaySettings" text="Settings" fx:id="menuItemSettings" />
+            <MenuItem mnemonicParsing="false" text="Refresh" fx:id="menuItemRefresh" />
+            <MenuItem mnemonicParsing="false" text="Logout" fx:id="menuItemLogout" />
+            <MenuItem mnemonicParsing="false" onAction="#closeApplication" text="Exit" fx:id="menuItemExit" />
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
           <items>
-            <MenuItem fx:id="menuItemAbout" mnemonicParsing="false" onAction="#displayAboutInfo" text="About" />
+            <MenuItem mnemonicParsing="false" onAction="#displayAboutInfo" text="About" fx:id="menuItemAbout" />
           </items>
         </Menu>
       </menus>
@@ -49,18 +49,18 @@
         </HBox>
         <HBox alignment="BOTTOM_RIGHT" layoutX="26.0" layoutY="58.0" prefHeight="40.0" prefWidth="951.0">
           <children>
-                  <ProgressIndicator fx:id="progressIndicator" prefHeight="30.0" prefWidth="794.0">
-                     <HBox.margin>
-                        <Insets top="10.0" />
-                     </HBox.margin>
-                  </ProgressIndicator>
+            <ProgressIndicator fx:id="progressIndicator" prefHeight="30.0" prefWidth="794.0">
+              <HBox.margin>
+                <Insets top="10.0" />
+              </HBox.margin>
+            </ProgressIndicator>
             <MenuButton alignment="CENTER_RIGHT" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" popupSide="BOTTOM" text="Options" underline="false">
               <items>
-                <MenuItem fx:id="menuItemOptionsRefresh" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
-                <MenuItem fx:id="menuItemOptionsPrint" mnemonicParsing="false" onAction="#print" text="Print" />
-                <MenuItem fx:id="menuItemOptionsSettings" mnemonicParsing="false" onAction="#displaySettings" text="Settings" />
-                <MenuItem fx:id="menuItemOptionsLogout" mnemonicParsing="false" onAction="#logout" text="Log Out" />
-                <MenuItem fx:id="menuItemOptionsExit" mnemonicParsing="false" onAction="#closeApplication" text="Exit" />
+                <MenuItem mnemonicParsing="false" onAction="#refresh" text="Refresh" fx:id="menuItemOptionsRefresh" />
+                <MenuItem mnemonicParsing="false" onAction="#print" text="Print" fx:id="menuItemOptionsPrint" />
+                <MenuItem mnemonicParsing="false" onAction="#displaySettings" text="Settings" fx:id="menuItemOptionsSettings" />
+                <MenuItem mnemonicParsing="false" onAction="#logout" text="Log Out" fx:id="menuItemOptionsLogout" />
+                <MenuItem mnemonicParsing="false" onAction="#closeApplication" text="Exit" fx:id="menuItemOptionsExit" />
               </items>
             </MenuButton>
           </children>
@@ -164,7 +164,7 @@
         </HBox>
         <VBox fx:id="vBoxFilter" prefHeight="76.0" prefWidth="513.0">
           <children>
-            <Label text="Filters">
+            <Label styleClass="moduleTextBold" text="Filters">
               <VBox.margin>
                 <Insets left="10.0" />
               </VBox.margin>
@@ -186,11 +186,20 @@
             </Button>
           </children>
         </HBox>
-        <TableView fx:id="tvData" prefHeight="360.0" prefWidth="513.0" VBox.vgrow="SOMETIMES">
+        <TableView fx:id="tvData" prefHeight="326.0" prefWidth="495.0" VBox.vgrow="SOMETIMES">
           <VBox.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
           </VBox.margin>
         </TableView>
+        <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="515.0">
+          <children>
+            <Label fx:id="lblQuantity" alignment="CENTER_RIGHT" prefWidth="192.0" styleClass="moduleTextBold" text="Total Quantity: 0" textAlignment="RIGHT">
+              <HBox.margin>
+                <Insets right="10.0" />
+              </HBox.margin>
+            </Label>
+          </children>
+        </HBox>
       </children>
     </VBox>
     <TabPane fx:id="tpFooter" layoutX="14.0" layoutY="653.0" prefHeight="101.0" prefWidth="986.0" tabClosingPolicy="UNAVAILABLE">
@@ -201,14 +210,8 @@
               <children>
                 <GridPane fx:id="gpTop3" alignment="CENTER" gridLinesVisible="false" layoutX="0.0" layoutY="0.0" prefHeight="59.0" prefWidth="742.0">
                   <children>
-                    <Label alignment="TOP_LEFT" contentDisplay="CENTER" prefWidth="70.0" styleClass="tabBarHeadingText" text="Vehicles" textAlignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                                 <padding>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                 </padding></Label>
-                    <Label alignment="TOP_LEFT" contentDisplay="CENTER" prefWidth="70.0" styleClass="tabBarHeadingText" text="Regions" textAlignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                                 <padding>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                 </padding></Label>
+                    <Label alignment="TOP_LEFT" contentDisplay="CENTER" prefWidth="70.0" styleClass="tabBarHeadingText" text="Vehicles" textAlignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <Label alignment="TOP_LEFT" contentDisplay="CENTER" prefWidth="70.0" styleClass="tabBarHeadingText" text="Regions" textAlignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                   </children>
                   <columnConstraints>
                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="492.0" minWidth="10.0" prefWidth="74.0" />
@@ -252,15 +255,8 @@
                 <Separator layoutX="489.0" layoutY="-7.0" orientation="VERTICAL" prefHeight="133.0" />
                 <GridPane id="gpBreakdown" fx:id="gpBreakdownOverall" layoutX="0.0" layoutY="5.0" prefHeight="52.0" prefWidth="271.0">
                   <children>
-                    <Label alignment="TOP_LEFT" prefHeight="37.0" prefWidth="168.0" styleClass="tabBarHeadingText" text="Years:" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                                 <padding>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                 </padding></Label>
-                              <Label alignment="TOP_LEFT" prefHeight="37.0" prefWidth="165.0" styleClass="tabBarHeadingText" text="Total vehicles sold:">
-                                 <padding>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                 </padding>
-                              </Label>
+                    <Label alignment="TOP_LEFT" prefHeight="37.0" prefWidth="168.0" styleClass="tabBarHeadingText" text="Years:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <Label alignment="TOP_LEFT" prefHeight="37.0" prefWidth="165.0" styleClass="tabBarHeadingText" text="Total vehicles sold:" />
                   </children>
                   <columnConstraints>
                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="10.0" prefWidth="160.0" />

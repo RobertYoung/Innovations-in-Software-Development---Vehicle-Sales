@@ -11,9 +11,7 @@ import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
@@ -37,6 +35,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -62,6 +61,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -69,7 +69,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import static javafx.scene.input.KeyCode.T;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -145,6 +144,8 @@ public class DashboardController implements Initializable {
     private Button btnReset;
     private Button btnSearch;
     private GridPane gpFilters;
+    @FXML
+    private Label lblQuantity;
     
     // Footer
     public TabPane tpFooter;
@@ -652,6 +653,8 @@ public class DashboardController implements Initializable {
     //***************************//
     private void setupTableView()
     {
+        this.tvData.getColumns().clear();
+        
         this.saleTableData = FXCollections.observableArrayList(this.sales);
         
         saleProperties = new LinkedList<String>();     
@@ -675,6 +678,18 @@ public class DashboardController implements Initializable {
         }        
         
         this.tvData.setColumnResizePolicy((param) -> true);
+        this.tvData.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        this.tvData.getSelectionModel().getSelectedItems().addListener(new ListChangeListener(){
+
+            @Override
+            public void onChanged(ListChangeListener.Change c) {
+                List<Sales> selectedSales = tvData.getSelectionModel().getSelectedItems();
+                int totalSelectedSales = selectedSales.stream().mapToInt(x -> x.getQuantity()).sum();
+                
+                lblQuantity.setText("Total Quantity: " + totalSelectedSales);
+            }
+            
+        });
         
         this.constructTableView();
     }
@@ -791,7 +806,15 @@ public class DashboardController implements Initializable {
         hBoxCloseButtons.setPadding(new Insets(10, 10, 10, 10));
         hBoxCloseButtons.getChildren().addAll(btnCancel, btnOk);
 
-        dialogStage.setScene(new Scene(VBoxBuilder.create().children(txtDescription, hBoxCloseButtons).alignment(Pos.CENTER).padding(new Insets(30)).build()));
+        /*        this.scene.getStylesheets().clear();
+        this.scene.getStylesheets().add(style);*/
+        
+        Scene confirmationScene = new Scene(VBoxBuilder.create().children(txtDescription, hBoxCloseButtons).alignment(Pos.CENTER).padding(new Insets(30)).build());
+        
+        confirmationScene.getStylesheets().clear();
+        confirmationScene.getStylesheets().add("css/" + this.vehicleDashboard.currentStyle + ".css");
+        
+        dialogStage.setScene(confirmationScene);
         dialogStage.initModality(Modality.APPLICATION_MODAL);
         dialogStage.show();   
     }

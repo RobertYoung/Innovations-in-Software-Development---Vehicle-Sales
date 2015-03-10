@@ -78,9 +78,6 @@ public class VehiclesDashboard extends Application {
         
         //add application icon 
         this.stage.getIcons().add(new Image("images/lotus.png"));
-        
-        //this.displayLogin();
-        
         this.setLotusStyle();
         
         service = new SalesService();
@@ -90,20 +87,17 @@ public class VehiclesDashboard extends Application {
             public void handle(WorkerStateEvent e) {
                 json = e.getSource().getValue().toString();
                 sales = (new Gson()).fromJson(json, new TypeToken<LinkedList<Sales>>() {}.getType());
-                
+
                 Platform.runLater(new Runnable() {
                     @Override public void run() {
                         dashboardFXML.setSalesData(sales);
                         dashboardFXML.setupUserInterface();
                     }
-            });
-
+                });
             }          
         });
         
-        service.start();
-        
-        this.displayDashboard();
+        this.displayLogin();
         this.startAutoRefresh();
     }
     
@@ -151,6 +145,8 @@ public class VehiclesDashboard extends Application {
     public void displayDashboard()
     {
         try {
+            service.start();
+            
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
             Parent root = fxmlLoader.load();            
             Scene scene = new Scene(root, 1024, 758);           
@@ -253,7 +249,7 @@ public class VehiclesDashboard extends Application {
     //**************//
     public void startAutoRefresh()
     {
-        Timeline autoRefresh = new Timeline(new KeyFrame(Duration.seconds(10), new EventHandler<ActionEvent>() {
+        Timeline autoRefresh = new Timeline(new KeyFrame(Duration.seconds(30), new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent event) {
