@@ -15,19 +15,25 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 /**
  *
  * @author cmpjbate
@@ -57,6 +63,7 @@ public class VehiclesDashboard extends Application {
     
     // Network variables
     public SalesService service;
+    public BooleanProperty autoRefreshEnabled = new SimpleBooleanProperty(true);
     
     /**
      * @param args the command line arguments
@@ -97,6 +104,7 @@ public class VehiclesDashboard extends Application {
         service.start();
         
         this.displayDashboard();
+        this.startAutoRefresh();
     }
     
     //**********************//
@@ -240,11 +248,28 @@ public class VehiclesDashboard extends Application {
             this.aboutFXML.setStyle("css/" + this.currentStyle + ".css");
     }
     
-    public void restartService()
+    //**************//
+    // AUTO REFRESH //
+    //**************//
+    public void startAutoRefresh()
     {
-        this.service.restart();
+        Timeline autoRefresh = new Timeline(new KeyFrame(Duration.seconds(10), new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                if (autoRefreshEnabled.getValue())
+                    service.restart();
+            }
+    
+        }));
+        
+        autoRefresh.setCycleCount(Timeline.INDEFINITE);
+        autoRefresh.play();
     }
     
+    //***************//
+    // SALES SERVICE //
+    //***************//
     public static class SalesService extends Service<String> {
         private StringProperty address = new SimpleStringProperty();
 

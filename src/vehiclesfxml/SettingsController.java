@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -34,6 +35,8 @@ public class SettingsController implements Initializable {
     
     @FXML
     private ComboBox cbStyle;
+    @FXML
+    private CheckBox cbAutoRefresh;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -43,6 +46,7 @@ public class SettingsController implements Initializable {
     public void init()
     {
         this.setupStyleComboBox();
+        this.setupAutoRefreshCheckBox();
     }
     
     //*****************//
@@ -94,5 +98,13 @@ public class SettingsController implements Initializable {
     {
         this.scene.getStylesheets().clear();
         this.scene.getStylesheets().add(style);
+    }
+
+    //************************//
+    // AUTO REFRESH FUNCTIONS //
+    //************************//
+    private void setupAutoRefreshCheckBox() {
+        this.cbAutoRefresh.setSelected(this.vehicleDashboard.autoRefreshEnabled.getValue());
+        this.vehicleDashboard.autoRefreshEnabled.bindBidirectional(this.cbAutoRefresh.selectedProperty());
     }
 }

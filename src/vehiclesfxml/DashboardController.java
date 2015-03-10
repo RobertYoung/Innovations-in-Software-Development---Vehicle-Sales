@@ -281,6 +281,7 @@ public class DashboardController implements Initializable {
     //***************************//
     public void setupUserInterfaceInitial()
     {
+        this.setupMenuItemImages();
         this.setupDateTimeLabel();
         this.vehicleDashboard.setStyle();
         this.setupInterfaceAnimations();
@@ -305,7 +306,6 @@ public class DashboardController implements Initializable {
         this.setupTop3();
         this.setupBreakdown();
         this.setupBreakdownOverall();
-        this.setupMenuItemImages();
     }
     
     public void setupInterfaceAnimations()
@@ -795,7 +795,7 @@ public class DashboardController implements Initializable {
     
     public void refresh()
     {
-        this.vehicleDashboard.restartService();
+        this.vehicleDashboard.service.restart();
     }
     
     public void logout()
