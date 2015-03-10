@@ -49,6 +49,11 @@
         </HBox>
         <HBox alignment="BOTTOM_RIGHT" layoutX="26.0" layoutY="58.0" prefHeight="40.0" prefWidth="951.0">
           <children>
+                  <ProgressIndicator fx:id="progressIndicator" prefHeight="30.0" prefWidth="794.0">
+                     <HBox.margin>
+                        <Insets top="10.0" />
+                     </HBox.margin>
+                  </ProgressIndicator>
             <MenuButton alignment="CENTER_RIGHT" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" popupSide="BOTTOM" text="Options" underline="false">
               <items>
                 <MenuItem fx:id="menuItemOptionsRefresh" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
@@ -182,9 +187,6 @@
           </children>
         </HBox>
         <TableView fx:id="tvData" prefHeight="360.0" prefWidth="513.0" VBox.vgrow="SOMETIMES">
-          <stylesheets>
-            <URL value="@Style.css" />
-          </stylesheets>
           <VBox.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
           </VBox.margin>

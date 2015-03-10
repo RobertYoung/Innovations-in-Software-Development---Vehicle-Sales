@@ -5,9 +5,14 @@
  */
 package vehiclesfxml;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import java.awt.Desktop;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Method;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -32,10 +37,14 @@ import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -88,6 +97,9 @@ public class DashboardController implements Initializable {
     // Anchor
     private AnchorPane anchorPane;
     
+    @FXML
+    private ProgressIndicator progressIndicator;
+    
     // Layouts
     public Pane paneNavBar;
     private VBox vBoxLeft;
@@ -122,6 +134,7 @@ public class DashboardController implements Initializable {
     private List<String> saleProperties;
     private List<Sales> searchedSales;
     
+    
     // Scene variables
     private Scene scene;
     
@@ -137,6 +150,7 @@ public class DashboardController implements Initializable {
     private BooleanProperty search = new SimpleBooleanProperty(false);
     private Button btnReset;
     private Button btnSearch;
+    private GridPane gpFilters;
     
     // Footer
     public TabPane tpFooter;
@@ -175,7 +189,7 @@ public class DashboardController implements Initializable {
     CheckBox[] yearCheckBoxes;
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb) {      
         // Layout
         this.paneNavBar = (Pane)this.anchorPane.lookup("#paneNavBar");
         this.paneCharts = (Pane)this.anchorPane.lookup("#paneCharts");
@@ -240,6 +254,10 @@ public class DashboardController implements Initializable {
     public void setSalesData(List<Sales> sales)
     {
         this.sales = sales;
+        
+        if (this.years != null)
+            this.years.clear();
+        
         this.years = this.sales.stream().map(x -> x.getYear()).distinct().collect(Collectors.toList());
     }
     
@@ -270,6 +288,16 @@ public class DashboardController implements Initializable {
     //***************************//
     // SETUP INTERFACE FUNCTIONS //
     //***************************//
+    public void setupUserInterfaceInitial()
+    {
+        this.vehicleDashboard.setStyle();
+        this.setupInterfaceAnimations();
+        this.progressIndicator.visibleProperty().bind(this.vehicleDashboard.service.runningProperty());
+        this.paneCharts.disableProperty().bind(this.vehicleDashboard.service.runningProperty());
+        this.vBoxViewData.disableProperty().bind(this.vehicleDashboard.service.runningProperty());
+        this.tpFooter.disableProperty().bind(this.vehicleDashboard.service.runningProperty());
+    }
+    
     public void setupUserInterface()
     {
         this.setupYearCheckboxes();
@@ -286,12 +314,15 @@ public class DashboardController implements Initializable {
         this.setupBreakdown();
         this.setupBreakdownOverall();
         this.setupMenuItemImages();
-        this.vehicleDashboard.setStyle();
-        this.setupInterfaceAnimations();
     }
     
     public void setupInterfaceAnimations()
     {       
+        TranslateTransition logoTransition = new TranslateTransition(Duration.millis(500), this.ivLogo);
+        
+        logoTransition.setFromX(ivLogo.translateXProperty().getValue() - 400);
+        logoTransition.setToX(ivLogo.translateXProperty().getValue());
+        
         TranslateTransition paneNavBarTransition = new TranslateTransition(Duration.millis(500), this.paneNavBar);
         
         paneNavBarTransition.setFromY(this.paneNavBar.getTranslateY() - 400);
@@ -318,7 +349,8 @@ public class DashboardController implements Initializable {
                 paneNavBarTransition,
                 vBoxViewDataTransition,
                 paneChartsTransition,
-                tpFooterTransition);
+                tpFooterTransition,
+                logoTransition);
         
         sequentialTransition.play();
     }
@@ -328,6 +360,9 @@ public class DashboardController implements Initializable {
     //***************************//
     public void setupYearCheckboxes()
     {
+        if (yearCheckBoxes != null)
+            this.hBoxYearCheckboxes.getChildren().removeAll(yearCheckBoxes);
+        
         yearCheckBoxes = new CheckBox[years.size()];
         
         for (int i = 0; i < years.size(); i++)
@@ -343,6 +378,7 @@ public class DashboardController implements Initializable {
                 }
             });
         }
+        //this.hBoxYearCheckboxes.getChildren().clear();
         this.hBoxYearCheckboxes.getChildren().addAll(yearCheckBoxes);
     }
     
@@ -366,6 +402,11 @@ public class DashboardController implements Initializable {
     //*********************//
     public void setupPieChart()
     {
+        String comboBoxYearValue = (String)this.comboBoxYears.getValue();
+        
+        if (comboBoxYearValue == null)
+            return;
+        
         int year = Integer.parseInt((String)this.comboBoxYears.getValue());
         List<Sales> yearData = this.sales.stream().filter(x -> x.getYear() == year).collect(Collectors.toList());
         
@@ -540,7 +581,10 @@ public class DashboardController implements Initializable {
     {
         this.cbFilters = new LinkedList<>();
         
-        GridPane gpFilters = new GridPane();
+        if (gpFilters != null)
+            this.vBoxFilter.getChildren().remove(gpFilters);
+        
+        gpFilters = new GridPane();
         
         gpFilters.setPadding(new Insets(2, 10, 2, 10));
         this.vBoxFilter.getChildren().add(gpFilters);
@@ -739,7 +783,7 @@ public class DashboardController implements Initializable {
     
     public void refresh()
     {
-        System.out.println("Refresh");
+        this.vehicleDashboard.restartService();
     }
     
     public void logout()
@@ -822,13 +866,6 @@ public class DashboardController implements Initializable {
                 Logger.getLogger(DashboardController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-       
-        this.ivLogo.translateXProperty().set(this.ivLogo.translateXProperty().get() - 400);
-        
-        Timeline timeline = new Timeline();
-        
-        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(2000), new KeyValue(this.ivLogo.translateXProperty(), this.ivLogo.translateXProperty().get() + 400)));
-        timeline.play();
     }
 
     //******************//
