@@ -38,7 +38,6 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
@@ -67,6 +66,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import static javafx.scene.input.KeyCode.T;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -288,6 +288,7 @@ public class DashboardController implements Initializable {
         this.paneCharts.disableProperty().bind(this.vehicleDashboard.service.runningProperty());
         this.vBoxViewData.disableProperty().bind(this.vehicleDashboard.service.runningProperty());
         this.tpFooter.disableProperty().bind(this.vehicleDashboard.service.runningProperty());
+        this.pieChart.disableProperty().bind(this.vehicleDashboard.service.runningProperty());
     }
     
     public void setupUserInterface()
@@ -561,6 +562,20 @@ public class DashboardController implements Initializable {
             }
             
             comboBoxYears.disableProperty().set(!newValue);            
+        });
+        
+        this.pieChart.dataProperty().addListener(new ChangeListener(){
+
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                for (CheckBox cb : yearCheckBoxes)
+                {
+                    cb.disableProperty().set(rbPieChart.selectedProperty().get());
+                }
+            
+                comboBoxYears.disableProperty().set(!rbPieChart.selectedProperty().get()); 
+            }
+            
         });
         
         this.pieChart.visibleProperty().bind(this.rbPieChart.selectedProperty());
