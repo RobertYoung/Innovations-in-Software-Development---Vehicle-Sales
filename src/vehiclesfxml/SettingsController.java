@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
@@ -51,6 +52,8 @@ public class SettingsController implements Initializable {
     {
         this.scene = scene;
         this.stage = (Stage)this.scene.getWindow();
+        //add application icon 
+        this.stage.getIcons().add(new Image("images/lotus.png"));
         this.vehicleDashboard.setStyle();
     }
     

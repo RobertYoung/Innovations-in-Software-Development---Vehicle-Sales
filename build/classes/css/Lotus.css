@@ -30,7 +30,14 @@
 //******//
 .labelWhite {
     -fx-text-fill: #fff;
-    -fx-font: 16px sans-serif; 
+    -fx-font: 16px sans-serif;
+    -fx-font-weight: bold; 
+}
+
+.labelBlack {
+    -fx-text-fill: #000;
+    -fx-font: 16px sans-serif;
+    -fx-font-weight: bold; 
 }
 
 .titleHeader {
@@ -67,27 +74,73 @@
 }
 
 //**********//
+// TAB BAR //
+//**********//
+.tabBarText { 
+    /* The text for the tabs */ 
+    -fx-text-fill: #000000;
+    -fx-font: 12px sans-serif; 
+    -fx-font-weight: bold;
+}
+
+.tabBarHeadingText { 
+    /* The text for the tabs */ 
+    -fx-text-fill: #000000;
+    -fx-font: 12px sans-serif; 
+    -fx-font-weight: bold;
+}
+
+.tab-pane .tab-label
+{
+    -fx-font-weight: bold;
+}
+
+.tab-pane .tab:selected
+{
+    -fx-background-color:
+        linear-gradient(#ffd65b, #e68400),
+        linear-gradient(#ffef84, #f2ba44),
+        linear-gradient(#ffea6a, #efaa22),
+        linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),
+        linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));
+}
+
+.tab:selected .tab-label { 
+    -fx-text-fill: #000000;
+}
+
+.tab pane
+{
+    -fx-text-fill: #ffd65b;
+}
+
+
+//**********//
 // MENU BAR //
 //**********//
 .menu-bar { 
     /* The menu bar itself */ 
     -fx-background-color: linear-gradient(#007A1D, #00360d);
+    -fx-text-fill: #000000;
 }
+
+.menu .label
+{     
+    -fx-text-fill: black;
+}
+
 .menu { 
     /* The File menu item */ 
 }
-.menu:showing { 
+
+//.menu:showing { 
     /* menu when it's being shown (activated) */ 
-}
-//.menu .label { 
-    /* Styles the text on a menu item */ 
-//    -fx-text-fill: white;
 //}
 
 
 .menu:showing .label { 
     /* Styles the text on a menu item when activated */ 
-    -fx-text-fill: black;
+    -fx-text-fill: #000000;
 }
 
 //*********//
@@ -110,10 +163,8 @@
 }
 
 .button:hover {
-    /*
-    -fx-text-fill: #fff;
+    //-fx-text-fill: #fff;
     -fx-background-color: #ffd65b;
-    */
 }
 
 .button:pressed, .button:default:hover:pressed {
@@ -153,8 +204,9 @@
 }
 
 //*************//
-// MENU BUTTON //
+// MENU //
 //*************//
+
 .menu-button
 {
     -fx-background-color: 
@@ -165,7 +217,7 @@
         linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));
     -fx-background-radius: 30;
     -fx-background-insets: 0,1,2,3,0;
-    -fx-text-fill: #654b00;
+    //-fx-text-fill: #654b00;
     -fx-font-weight: bold;
     -fx-font-size: 11px;
 }
@@ -179,8 +231,8 @@
 
 .menu-button:active
 {
-    -fx-text-fill: #000;
-    -fx-background-color: #ffd65b;
+    -fx-text-fill: #000000;
+    -fx-background-color: #fff000;
     -fx-cursor: hand;
 }
 
@@ -189,10 +241,10 @@
     -fx-text-fill: black;
 }
 
-.menu-item:hover
+.menu-item:hover .label
 {
-    //-fx-text-fill: #000;
-    -fx-background-color: rgba(255, 214, 91, 0.7);
+    -fx-text-fill: #000;
+    //-fx-background-color: rgba(255, 214, 91, 0.7);
 }
 
 /*.combo-box

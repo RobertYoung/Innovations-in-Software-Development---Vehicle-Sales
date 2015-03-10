@@ -703,6 +703,7 @@ public class DashboardController implements Initializable {
 
         dialogStage.setScene(new Scene(VBoxBuilder.create().children(txtDescription, btnOk).alignment(Pos.CENTER).padding(new Insets(10)).build()));
         dialogStage.initModality(Modality.APPLICATION_MODAL);
+        dialogStage.getIcons().add(new Image("images/lotus.png"));
         dialogStage.show();
     }
     

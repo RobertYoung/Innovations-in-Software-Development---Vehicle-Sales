@@ -17,6 +17,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 /**
  *
@@ -56,8 +57,11 @@ public class VehiclesDashboard extends Application {
     public void start(Stage stage) throws Exception {
         this.stage = stage;
         
-       // this.displayLogin();
-        this.displayDashboard();
+        //add application icon 
+        this.stage.getIcons().add(new Image("images/lotus.png"));
+        
+        this.displayLogin();
+        //this.displayDashboard();
         this.setLotusStyle();
         
         /*

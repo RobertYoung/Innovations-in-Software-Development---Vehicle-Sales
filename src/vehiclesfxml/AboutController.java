@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
@@ -35,8 +36,10 @@ public class AboutController implements Initializable {
     //*****************//
     public void setScene(Scene scene)
     {
-        this.scene = scene;
+        this.scene = scene;        
         this.stage = (Stage)this.scene.getWindow();
+        //add application icon 
+        this.stage.getIcons().add(new Image("images/lotus.png"));
         this.vehicleDashboard.setStyle();
     }
     
