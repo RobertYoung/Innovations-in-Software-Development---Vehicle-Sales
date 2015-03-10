@@ -13,8 +13,11 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.IntSummaryStatistics;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -851,16 +854,22 @@ public class DashboardController implements Initializable {
     //*********************//
     private void setupDateTimeLabel()
     {
-        DateFormat format = DateFormat.getInstance();
-        
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), (ActionEvent event) -> {
-            Calendar calendar = Calendar.getInstance();
-            
-            lblDateTime.setText(format.format(calendar.getTime()));
-        }));
-        
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("EEE MMM d HH:mm:ss");
+
+            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), (ActionEvent event) -> {
+                Calendar calendar = Calendar.getInstance();
+                Date date = calendar.getTime();
+                String dateStr = format.format(date);
+
+                lblDateTime.setText(dateStr);
+            }));
+
+            timeline.setCycleCount(Animation.INDEFINITE);
+            timeline.play();
+        }catch (Exception e){
+            System.err.println(e.getMessage());
+        }
     }
     
     //*****************//
