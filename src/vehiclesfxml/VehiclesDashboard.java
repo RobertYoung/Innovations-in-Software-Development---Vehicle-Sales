@@ -25,6 +25,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.concurrent.Worker;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -64,6 +65,7 @@ public class VehiclesDashboard extends Application {
     // Network variables
     public SalesService service;
     public BooleanProperty autoRefreshEnabled = new SimpleBooleanProperty(true);
+    public Timeline autoRefresh;
     
     /**
      * @param args the command line arguments
@@ -145,7 +147,10 @@ public class VehiclesDashboard extends Application {
     public void displayDashboard()
     {
         try {
-            service.start();
+            if (service.getState().equals(Worker.State.READY))
+                service.start();     
+            
+            autoRefresh.play();
             
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
             Parent root = fxmlLoader.load();            
@@ -249,7 +254,7 @@ public class VehiclesDashboard extends Application {
     //**************//
     public void startAutoRefresh()
     {
-        Timeline autoRefresh = new Timeline(new KeyFrame(Duration.seconds(30), new EventHandler<ActionEvent>() {
+        autoRefresh = new Timeline(new KeyFrame(Duration.seconds(30), new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent event) {

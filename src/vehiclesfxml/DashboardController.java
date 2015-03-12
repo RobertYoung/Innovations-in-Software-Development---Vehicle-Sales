@@ -826,6 +826,10 @@ public class DashboardController implements Initializable {
     
     public void logout()
     {
+        if (!this.vehicleDashboard.service.isRunning())
+            this.vehicleDashboard.service.reset();
+        
+        this.vehicleDashboard.autoRefresh.stop();        
         this.vehicleDashboard.displayLogin();
     }
     
